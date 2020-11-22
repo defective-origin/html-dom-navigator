@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive test of navigator</title>
+  </head>
+  <body>
+    <style>
+      [data-nav],
+      .none {
+        box-sizing: border-box;
+        padding: 24px 10px 10px 10px ;
+        border: 1px solid black;
+        display: flex;
+        align-content: stretch;
+        width: 100%;
+        position: relative;
+      }
+
+      [data-nav]::after,
+      .none::after {
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 3px;
+        color: rgb(255, 166, 0);
+      }
+
+      [data-nav="column"] {
+        flex-direction: row;
+      }
+
+      [data-nav="column"]::after {
+        content: "Type: column";
+      }
+
+      [data-nav="row"],
+      .none {
+        flex-direction: column;
+      }
+
+      [data-nav="row"]::after {
+        content: "Type: row";
+      }
+
+      [data-nav="item"] {
+        background: blue;
+      }
+
+      .none::after {
+        content: "Type: none";
+      }
+
+      [data-nav="column"] > [data-nav="item"] {
+        background: blue;
+        width: min-content;
+      }
+    </style>
+    <div id="root" data-nav="row">
+      <header data-nav="column">
+        <div data-nav="item">1</div>
+        <div data-nav="item">2</div>
+      </header>
+      
+      <main data-nav="column">
+        <aside data-nav="row">
+          <div data-nav="column">
+            <div data-nav="item">1</div>
+            <div data-nav="item">2</div>
+          </div>
+          <div data-nav="column">
+            <div data-nav="item">1</div>
+            <div data-nav="item">2</div>
+          </div>
+          <div data-nav="column">
+            <div data-nav="item">1</div>
+            <div data-nav="item">2</div>
+          </div>
+        </aside>
+
+        <article data-nav="row">
+          <section data-nav="row">
+            <div data-nav="item">1</div>
+            <div data-nav="item">2</div>
+          </section>
+          
+          <section data-nav="column">
+            <div data-nav="item">1</div>
+            <div data-nav="item">2</div>
+          </section>
+
+          <section class="none">
+            <div data-nav="item">1</div>
+            <div data-nav="item">2</div>
+          </section>
+
+          <section data-nav="column">
+            <div data-nav="item">1</div>
+            <div data-nav="item">2</div>
+          </section>
+        </article>
+      </main>
+    </div>
+
+    <script src="./dist/index.js">
+      const elem = document.getElementById('root')
+      window.HtmlDomNavigator.observe(elem)
+    </script>
+  </body>
+</html>

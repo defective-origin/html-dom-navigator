@@ -1,3 +1,11 @@
 import Navigator from './Navigator'
 
-export default new Navigator()
+declare global {
+  interface Window {
+    HtmlDomNavigator: Navigator;
+  }
+}
+
+if (typeof window !== 'undefined') {
+  window.HtmlDomNavigator = new Navigator()
+}
