@@ -27,19 +27,19 @@ export default class NavTreeNode {
     if (parent) {
       this.index = parent.children.length
       this.layer = parent.layer + Offset.Next || layer
-      parent.children.push(parent)
+      parent.children.push(this)
     }
 
     this.elem.tabIndex = -1 // in order to navigate programmatically and elem.focus() works
-    this.elem.dataset[NavItemDataAttrs.NavLabel] = `layer: ${this.layer} Index: ${this.index}`
+    this.elem.dataset[NavItemDataAttrs.NavLabel] = this.elem.dataset[NavItemDataAttrs.NavLabel] || `layer: ${this.layer} Index: ${this.index}`
   }
 
-  public get type(): string {
-    return this.elem.dataset[NavItemDataAttrs.NavType] as string
+  public get type(): string | null {
+    return this.elem.dataset[NavItemDataAttrs.NavType] || null
   }
 
-  public get label(): string {
-    return this.elem.dataset[NavItemDataAttrs.NavLabel] as string
+  public get label(): string | null {
+    return this.elem.dataset[NavItemDataAttrs.NavLabel] || null
   }
 
   public get isActive(): boolean {
