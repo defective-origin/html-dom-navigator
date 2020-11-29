@@ -24,7 +24,7 @@ export default class NavTree implements INavTreeHtmlObservable,
       const childElem = elem.children[index] as HTMLElement
       if (NavTreeNode.hasNavTypeAttribute(childElem)) {
         const childNode = new NavTreeNode(childElem, parent)
-        this.nodeMapByLabel[childNode.label] = childNode
+        this.nodeMapByLabel[childNode.label as string] = childNode
 
         if (childNode.type !== NavItemTypes.Item) {
           this.build(childElem, childNode)

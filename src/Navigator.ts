@@ -10,7 +10,7 @@ export default class Navigator {
   public navTreeKeyPressObserver = new NavTreeKeyPressObserver()
 
   public observe(elem: HTMLElement): void {
-    if (this.navTree && !elem.isEqualNode(this.navTree.elem)) {
+    if (!elem.isEqualNode(this.navTree && this.navTree.elem)) {
       this.navTree = new NavTree(elem)
       this.navTreeHtmlObserver.watch(this.navTree)
       this.navTreeClickObserver.watch(this.navTree)
