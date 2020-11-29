@@ -71,7 +71,7 @@
       <main data-nav="column">
         <aside data-nav="row">
           <div data-nav="column">
-            <div data-nav="item">1</div>
+            <div id="remove-1" data-nav="item">1</div>
             <div data-nav="item">2</div>
           </div>
           <div data-nav="column">
@@ -85,7 +85,7 @@
         </aside>
 
         <article data-nav="row">
-          <section data-nav="row">
+          <section id="remove-2" data-nav="row">
             <div data-nav="item">1</div>
             <div data-nav="item">2</div>
           </section>
@@ -96,7 +96,7 @@
           </section>
 
           <section class="none">
-            <div data-nav="item">1</div>
+            <div id="remove-3" data-nav="item">1</div>
             <div data-nav="item">2</div>
           </section>
 
@@ -107,10 +107,17 @@
         </article>
       </main>
     </div>
-
+    <button onclick="removeNode()">Remove</button>
     <script>
       const elem = document.getElementById('root')
       window.HtmlDomNavigator.observe(elem)
+
+      let number = 1
+      function removeNode() {
+        console.log('remove')
+        const element = document.getElementById(`remove-${number++}`)
+        element.remove()
+      }
     </script>
   </body>
 </html>
