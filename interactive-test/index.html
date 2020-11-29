@@ -46,7 +46,7 @@
       }
 
       [data-nav="item"] {
-        background: blue;
+        background: green;
       }
 
       .none::after {
@@ -54,8 +54,12 @@
       }
 
       [data-nav="column"] > [data-nav="item"] {
-        background: blue;
+        background: gray;
         width: min-content;
+      }
+
+      [data-nav][data-active-nav-item="true"] {
+        background: orange;
       }
     </style>
     <div id="root" data-nav="row">
