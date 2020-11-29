@@ -48,10 +48,15 @@ export default class NavTree implements INavTreeHtmlObservable,
     const prevActiveNavItemUuid = this.activeNode?.uuid as string
     this.nodeMapByUuid = {}
     this.nodeMapByLabel = {}
-    this.deactivateNode()
     this.rootNode = new NavTreeNode(this.elem)
+    this.deactivateNode()
     this.build(this.elem, this.rootNode)
-    this.activateNodeByUuid(prevActiveNavItemUuid)
+
+    if (this.nodeMapByUuid[prevActiveNavItemUuid]) {
+      this.activateNodeByUuid(prevActiveNavItemUuid)
+    } else {
+      this.activateNode(this.rootNode)
+    }
   }
 
   public activateNodeByLabel(key: string): void {
