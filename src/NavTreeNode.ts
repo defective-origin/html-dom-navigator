@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid'
+
 export enum NavItemTypes {
   Row = 'row',
   Column = 'column',
@@ -7,6 +9,7 @@ export enum NavItemTypes {
 export enum NavItemDataAttrs {
   NavType = 'nav',
   NavLabel = 'navLabel',
+  NavUuid = 'navUuid',
   ActiveNavItem = 'activeNavItem',
 }
 
@@ -21,21 +24,26 @@ export default class NavTreeNode {
   constructor(
     public elem: HTMLElement,
     public parent: NavTreeNode | null = null,
-    public layer: number = 0,
     public index: number = 0,
   ) {
     if (parent) {
       this.index = parent.children.length
-      this.layer = parent.layer + Offset.Next || layer
       parent.children.push(this)
     }
 
-    this.elem.tabIndex = -1 // in order to navigate programmatically and elem.focus() works
-    this.elem.dataset[NavItemDataAttrs.NavLabel] = this.elem.dataset[NavItemDataAttrs.NavLabel] || `layer: ${this.layer} Index: ${this.index}`
+    if (this.hasType(NavItemTypes.Item)) {
+      this.elem.tabIndex = -1 // in order to navigate programmatically and elem.focus() works
+    }
+
+    this.elem.dataset[NavItemDataAttrs.NavUuid] = uuidv4()
   }
 
   public get type(): string | null {
     return this.elem.dataset[NavItemDataAttrs.NavType] || null
+  }
+
+  public get uuid(): string {
+    return this.elem.dataset[NavItemDataAttrs.NavUuid] as string
   }
 
   public get label(): string | null {

@@ -8,11 +8,8 @@ export default class NavTree implements INavTreeHtmlObservable,
                                         INavTreeClickObservable {
   public elem: HTMLElement
   public rootNode: NavTreeNode
-  public nodeMapByLabel: Record<string, NavTreeNode> = {}
+  public nodeMapByUuid: Record<string, NavTreeNode> = {}
   public activeNode: NavTreeNode | null = null
-
-  // public nodeMapByPosition = {}
-  // public nodeMapByLabel = {}
 
   constructor(elem: HTMLElement) {
     this.elem = elem
@@ -27,7 +24,7 @@ export default class NavTree implements INavTreeHtmlObservable,
       const childElem = elem.children[index] as HTMLElement
       if (NavTreeNode.hasNavTypeAttribute(childElem)) {
         const childNode = new NavTreeNode(childElem, parent)
-        this.nodeMapByLabel[childNode.label as string] = childNode
+        this.nodeMapByUuid[childNode.uuid as string] = childNode
 
         if (childNode.type !== NavItemTypes.Item) {
           this.build(childElem, childNode)
@@ -39,16 +36,16 @@ export default class NavTree implements INavTreeHtmlObservable,
   }
 
   public rebuild(): void {
-    const prevActiveNavItemLabel = this.activeNode?.label as string
-    this.nodeMapByLabel = {}
+    const prevActiveNavItemLabel = this.activeNode?.uuid as string
+    this.nodeMapByUuid = {}
     this.rootNode = new NavTreeNode(this.elem)
     this.build(this.elem, this.rootNode)
     this.activateNode(prevActiveNavItemLabel)
   }
 
   public activateNode(node: string | NavTreeNode | null): void {
-    const currentNode = node instanceof NavTreeNode ? node : this.nodeMapByLabel[node as string]
-    if (!currentNode || currentNode.label === this.activeNode?.label) {
+    const currentNode = node instanceof NavTreeNode ? node : this.nodeMapByUuid[node as string]
+    if (!currentNode || currentNode.uuid === this.activeNode?.uuid) {
       return
     }
 
@@ -73,8 +70,8 @@ export default class NavTree implements INavTreeHtmlObservable,
     }
 
     const parentNode = node.parent
-    if (parentNode.hasType(type)) {
-      const nextNode = parentNode.getChildNode(node.index + offset)
+    const nextNode = parentNode.getChildNode(node.index + offset)
+    if (parentNode.hasType(type) && nextNode) {
       this.activateNode(nextNode)
     } else {
       this.move(parentNode, type, offset)
