@@ -73,7 +73,6 @@ export default class NavTree implements INavTreeHtmlObservable,
       this.activeNode?.deactivate()
       this.activeNode = node
       this.activeNode?.activate()
-      console.log(this.rootNode, this.activeNode)
     } else {
       const childNode = node.getFirstChildNode()
       this.activateNode(childNode)
