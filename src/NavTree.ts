@@ -9,6 +9,7 @@ export default class NavTree implements INavTreeHtmlObservable,
   public elem: HTMLElement
   public rootNode: NavTreeNode
   public nodeMapByUuid: Record<string, NavTreeNode> = {}
+  public nodeMapByLabel: Record<string, NavTreeNode> = {}
   public activeNode: NavTreeNode | null = null
 
   constructor(elem: HTMLElement) {
@@ -24,7 +25,7 @@ export default class NavTree implements INavTreeHtmlObservable,
       const childElem = elem.children[index] as HTMLElement
       if (NavTreeNode.hasNavTypeAttribute(childElem)) {
         const childNode = new NavTreeNode(childElem, parent)
-        this.nodeMapByUuid[childNode.uuid as string] = childNode
+        this.registerNode(childNode)
 
         if (childNode.type !== NavItemTypes.Item) {
           this.build(childElem, childNode)
@@ -35,26 +36,43 @@ export default class NavTree implements INavTreeHtmlObservable,
     }
   }
 
+  protected registerNode(node: NavTreeNode): void {
+    this.nodeMapByUuid[node.uuid] = node
+
+    if (node.label) {
+      this.nodeMapByLabel[node.label] = node
+    }
+  }
+
   public rebuild(): void {
-    const prevActiveNavItemLabel = this.activeNode?.uuid as string
+    const prevActiveNavItemUuid = this.activeNode?.uuid as string
     this.nodeMapByUuid = {}
     this.rootNode = new NavTreeNode(this.elem)
     this.build(this.elem, this.rootNode)
-    this.activateNode(prevActiveNavItemLabel)
+    this.activateNodeByUuid(prevActiveNavItemUuid)
   }
 
-  public activateNode(node: string | NavTreeNode | null): void {
-    const currentNode = node instanceof NavTreeNode ? node : this.nodeMapByUuid[node as string]
-    if (!currentNode || currentNode.uuid === this.activeNode?.uuid) {
+  public activateNodeByLabel(key: string): void {
+    const node = this.nodeMapByLabel[key]
+    this.activateNode(node)
+  }
+
+  public activateNodeByUuid(key: string): void {
+    const node = this.nodeMapByUuid[key]
+    this.activateNode(node)
+  }
+
+  public activateNode(node: NavTreeNode | null): void {
+    if (!node || node.uuid === this.activeNode?.uuid) {
       return
     }
 
-    if (currentNode.hasType(NavItemTypes.Item)) {
+    if (node.hasType(NavItemTypes.Item)) {
       this.activeNode?.deactivate()
-      this.activeNode = currentNode
+      this.activeNode = node
       this.activeNode?.activate()
     } else {
-      const childNode = currentNode.getFirstChildNode()
+      const childNode = node.getFirstChildNode()
       this.activateNode(childNode)
     }
   }

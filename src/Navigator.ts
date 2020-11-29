@@ -18,8 +18,12 @@ export default class Navigator {
     }
   }
 
-  public activateNavItem(label: string): void {
-    this.navTree?.activateNode(label)
+  public activateNavItemByLabel(key: string): void {
+    this.navTree?.activateNodeByLabel(key)
+  }
+
+  public activateNavItemByUuid(key: string): void {
+    this.navTree?.activateNodeByUuid(key)
   }
 
   public deactivateNavItem(): void {

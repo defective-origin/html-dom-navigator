@@ -1,7 +1,7 @@
-import NavTreeNode, { NavItemDataAttrs, NavItemTypes } from '../NavTreeNode'
+import { NavItemDataAttrs, NavItemTypes } from '../NavTreeNode'
 
 export interface INavTreeClickObservable {
-  activateNode(node: string | NavTreeNode): void
+  activateNodeByUuid(node: string): void
 }
 
 export default class NavTreeClickObserver {
@@ -21,7 +21,7 @@ export default class NavTreeClickObserver {
       return
     }
 
-    this.observable?.activateNode(elem.dataset[NavItemDataAttrs.NavLabel] as string)
+    this.observable?.activateNodeByUuid(elem.dataset[NavItemDataAttrs.NavUuid] as string)
   }
 
   public unwatch = (): void => {
