@@ -11,14 +11,14 @@ export default class NavTreeKeyPressObserver {
     ArrowUp: () => this.observable?.up(),
     ArrowDown: () => this.observable?.down(),
     ArrowLeft: () => this.observable?.left(),
-    ArrowRight: () => this.observable?.up(),
+    ArrowRight: () => this.observable?.right(),
   }
 
   public watch = (observable: INavTreeKeyPressObservable): void => {
     this.unwatch()
 
     this.observable = observable
-    window.onkeypress = this.onKeyEventDetected
+    window.onkeydown = this.onKeyEventDetected
   }
 
   public onKeyEventDetected = (event: KeyboardEvent): void => {
@@ -29,7 +29,7 @@ export default class NavTreeKeyPressObserver {
   }
 
   public unwatch = (): void => {
-    window.onkeypress = null
+    window.onkeydown = null
     this.observable = null
   }
 }
