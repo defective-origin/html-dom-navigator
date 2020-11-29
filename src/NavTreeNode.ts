@@ -35,7 +35,9 @@ export default class NavTreeNode {
       this.elem.tabIndex = -1 // in order to navigate programmatically and elem.focus() works
     }
 
-    this.elem.dataset[NavItemDataAttrs.NavUuid] = uuidv4()
+    if (!this.elem.dataset[NavItemDataAttrs.NavUuid]) {
+      this.elem.dataset[NavItemDataAttrs.NavUuid] = uuidv4()
+    }
   }
 
   public get type(): string | null {

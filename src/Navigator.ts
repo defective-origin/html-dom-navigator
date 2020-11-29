@@ -29,6 +29,12 @@ export default class Navigator {
   public deactivateNavItem(): void {
     this.navTree?.deactivateNode()
   }
+
+  public unsubscribe(): void {
+    this.navTreeHtmlObserver.unwatch()
+    this.navTreeClickObserver.unwatch()
+    this.navTreeKeyPressObserver.unwatch()
+  }
 }
 
 // TODO: implement without building tree, just set data attributes and test speed

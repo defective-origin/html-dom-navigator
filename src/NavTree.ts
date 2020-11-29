@@ -44,11 +44,11 @@ export default class NavTree implements INavTreeHtmlObservable,
     }
   }
 
-  // FIXME: rebuild
   public rebuild(): void {
     const prevActiveNavItemUuid = this.activeNode?.uuid as string
     this.nodeMapByUuid = {}
     this.nodeMapByLabel = {}
+    this.deactivateNode()
     this.rootNode = new NavTreeNode(this.elem)
     this.build(this.elem, this.rootNode)
     this.activateNodeByUuid(prevActiveNavItemUuid)
@@ -73,6 +73,7 @@ export default class NavTree implements INavTreeHtmlObservable,
       this.activeNode?.deactivate()
       this.activeNode = node
       this.activeNode?.activate()
+      console.log(this.rootNode, this.activeNode)
     } else {
       const childNode = node.getFirstChildNode()
       this.activateNode(childNode)

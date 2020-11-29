@@ -21,7 +21,6 @@ export default class NavTreeClickObserver {
       return
     }
 
-    // TODO: make static
     this.observable?.activateNodeByUuid(elem.dataset[NavItemDataAttrs.NavUuid] as string)
   }
 
