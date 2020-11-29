@@ -11,6 +11,9 @@ export default class NavTree implements INavTreeHtmlObservable,
   public nodeMapByLabel: Record<string, NavTreeNode> = {}
   public activeNode: NavTreeNode | null = null
 
+  // public nodeMapByPosition = {}
+  // public nodeMapByLabel = {}
+
   constructor(elem: HTMLElement) {
     this.elem = elem
     this.rootNode = new NavTreeNode(elem)
