@@ -20,11 +20,11 @@ export enum Offset {
 
 export default class NavTreeNode {
   private children: NavTreeNode[] = []
+  public index = 0
 
   constructor(
     public elem: HTMLElement,
     public parent: NavTreeNode | null = null,
-    public index: number = 0,
   ) {
     if (parent) {
       this.index = parent.children.length

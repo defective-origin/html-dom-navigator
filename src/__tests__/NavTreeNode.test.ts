@@ -7,6 +7,44 @@ describe('<NavTreeNode> class', () => {
     elem = document.createElement('div')
   })
 
+  describe('<constructor>', () => {
+    it('should update index if node is not first child', () => {
+      const parent = new NavTreeNode(document.createElement('div'))
+      const node1 = new NavTreeNode(document.createElement('div'), parent)
+      const node2 = new NavTreeNode(elem, parent)
+
+      expect(node2.index).toEqual(1)
+    })
+
+    it('should add himself to parent node', () => {
+      const parent = new NavTreeNode(document.createElement('div'))
+      const node = new NavTreeNode(elem, parent)
+
+      expect(parent.getFirstChildNode()?.uuid).toEqual(node.uuid)
+    })
+
+    it('should set uuid', () => {
+      const node = new NavTreeNode(elem)
+
+      expect(node.uuid).toMatch(/\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/)
+    })
+
+    it('should not set uuid if it is set already', () => {
+      elem.dataset[NavItemDataAttrs.NavUuid] = 'TEST'
+      const node = new NavTreeNode(elem)
+
+      expect(node.uuid).toEqual('TEST')
+    })
+
+    it('should set tabindex = -1 for node with type ITEM in order to navigate by it', () => {
+      elem.dataset[NavItemDataAttrs.NavType] = NavItemTypes.Item
+      const node = new NavTreeNode(elem)
+
+      expect(elem.tabIndex).toEqual(-1)
+    })
+
+  })
+
   describe('<type> getter', () => {
     it('should return type', () => {
       elem.dataset[NavItemDataAttrs.NavType] = NavItemTypes.Item
@@ -30,10 +68,19 @@ describe('<NavTreeNode> class', () => {
       expect(node.label).toEqual('TEST')
     })
 
-    it('should return default label if type is not defined', () => {
+    it('should return null if label is not set', () => {
       const node = new NavTreeNode(elem)
 
-      expect(node.label).toEqual('layer: 0 Index: 0')
+      expect(node.label).toEqual(null)
+    })
+  })
+
+  describe('<uuid> getter', () => {
+    it('should return uuid', () => {
+      elem.dataset[NavItemDataAttrs.NavUuid] = 'TEST'
+      const node = new NavTreeNode(elem)
+
+      expect(node.uuid).toEqual('TEST')
     })
   })
 
