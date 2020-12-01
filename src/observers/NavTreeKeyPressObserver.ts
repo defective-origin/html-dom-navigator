@@ -6,18 +6,17 @@ export interface INavTreeKeyPressObservable {
 }
 
 export default class NavTreeKeyPressObserver {
-  private observable: INavTreeKeyPressObservable | null = null
-  private controls: Record<string, () => void> = {
-    ArrowUp: () => this.observable?.up(),
-    ArrowDown: () => this.observable?.down(),
-    ArrowLeft: () => this.observable?.left(),
-    ArrowRight: () => this.observable?.right(),
-  }
+  private controls: Record<string, () => void> = {}
 
   public subscribe = (observable: INavTreeKeyPressObservable): void => {
     this.unsubscribe()
 
-    this.observable = observable
+    this.controls = {
+      ArrowUp: observable.up,
+      ArrowDown: observable.down,
+      ArrowLeft: observable.left,
+      ArrowRight: observable.right,
+    }
     window.onkeydown = this.onKeyEventDetected
   }
 
@@ -30,6 +29,5 @@ export default class NavTreeKeyPressObserver {
 
   public unsubscribe = (): void => {
     window.onkeydown = null
-    this.observable = null
   }
 }

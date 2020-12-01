@@ -17,11 +17,9 @@ export default class NavTreeClickObserver {
   public onClickEventDetected = (event: MouseEvent): void => {
     const elem = (event.target as HTMLElement).closest<HTMLElement>(`[data-nav="${NavItemTypes.Item}"]`)
 
-    if (!elem) {
-      return
+    if (elem && this.observable) {
+      this.observable.activateNodeByUuid(elem.dataset[NavItemDataAttrs.NavUuid] as string)
     }
-
-    this.observable?.activateNodeByUuid(elem.dataset[NavItemDataAttrs.NavUuid] as string)
   }
 
   public unsubscribe = (): void => {

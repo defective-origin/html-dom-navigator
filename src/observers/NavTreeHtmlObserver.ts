@@ -5,7 +5,7 @@ export interface INavTreeHtmlObservable {
 }
 
 export default class NavTreeHtmlObserver {
-  private observer: MutationObserver | null = null
+  public mutationObserver: MutationObserver
   private observable: INavTreeHtmlObservable | null = null
   private observerConfig: MutationObserverInit = {
     attributes: true,
@@ -14,12 +14,15 @@ export default class NavTreeHtmlObserver {
     attributeFilter: ['data-nav'],
   }
 
+  constructor() {
+    this.mutationObserver = new MutationObserver(this.onHtmlChangeDetected)
+  }
+
   public subscribe = (observable: INavTreeHtmlObservable): void => {
     this.unsubscribe()
 
     this.observable = observable
-    this.observer = new MutationObserver(this.onHtmlChangeDetected)
-    this.observer.observe(this.observable.elem, this.observerConfig)
+    this.mutationObserver.observe(this.observable.elem, this.observerConfig)
   }
 
   public onHtmlChangeDetected = (): void => {
@@ -27,8 +30,7 @@ export default class NavTreeHtmlObserver {
   }
 
   public unsubscribe = (): void => {
-    this.observer?.disconnect()
-    this.observer = null
+    this.mutationObserver.disconnect()
     this.observable = null
   }
 }
