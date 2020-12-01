@@ -14,8 +14,8 @@ export default class NavTreeHtmlObserver {
     attributeFilter: ['data-nav'],
   }
 
-  public watch = (observable: INavTreeHtmlObservable): void => {
-    this.unwatch()
+  public subscribe = (observable: INavTreeHtmlObservable): void => {
+    this.unsubscribe()
 
     this.observable = observable
     this.observer = new MutationObserver(this.onHtmlChangeDetected)
@@ -26,7 +26,7 @@ export default class NavTreeHtmlObserver {
     this.observable?.rebuild()
   }
 
-  public unwatch = (): void => {
+  public unsubscribe = (): void => {
     this.observer?.disconnect()
     this.observer = null
     this.observable = null

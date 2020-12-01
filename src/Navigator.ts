@@ -9,12 +9,12 @@ export default class Navigator {
   public navTreeClickObserver = new NavTreeClickObserver()
   public navTreeKeyPressObserver = new NavTreeKeyPressObserver()
 
-  public observe(elem: HTMLElement): void {
+  public subscribe(elem: HTMLElement): void {
     if (!elem.isEqualNode(this.navTree && this.navTree.elem)) {
       this.navTree = new NavTree(elem)
-      this.navTreeHtmlObserver.watch(this.navTree)
-      this.navTreeClickObserver.watch(this.navTree)
-      this.navTreeKeyPressObserver.watch(this.navTree)
+      this.navTreeHtmlObserver.subscribe(this.navTree)
+      this.navTreeClickObserver.subscribe(this.navTree)
+      this.navTreeKeyPressObserver.subscribe(this.navTree)
     }
   }
 
@@ -31,10 +31,8 @@ export default class Navigator {
   }
 
   public unsubscribe(): void {
-    this.navTreeHtmlObserver.unwatch()
-    this.navTreeClickObserver.unwatch()
-    this.navTreeKeyPressObserver.unwatch()
+    this.navTreeHtmlObserver.unsubscribe()
+    this.navTreeClickObserver.unsubscribe()
+    this.navTreeKeyPressObserver.unsubscribe()
   }
 }
-
-// TODO: implement without building tree, just set data attributes and test speed

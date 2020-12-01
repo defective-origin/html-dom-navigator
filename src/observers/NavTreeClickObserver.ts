@@ -7,8 +7,8 @@ export interface INavTreeClickObservable {
 export default class NavTreeClickObserver {
   private observable: INavTreeClickObservable | null = null
 
-  public watch = (observable: INavTreeClickObservable): void => {
-    this.unwatch()
+  public subscribe = (observable: INavTreeClickObservable): void => {
+    this.unsubscribe()
 
     this.observable = observable
     window.onclick = this.onClickEventDetected
@@ -24,7 +24,7 @@ export default class NavTreeClickObserver {
     this.observable?.activateNodeByUuid(elem.dataset[NavItemDataAttrs.NavUuid] as string)
   }
 
-  public unwatch = (): void => {
+  public unsubscribe = (): void => {
     window.onclick = null
     this.observable = null
   }

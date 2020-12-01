@@ -14,8 +14,8 @@ export default class NavTreeKeyPressObserver {
     ArrowRight: () => this.observable?.right(),
   }
 
-  public watch = (observable: INavTreeKeyPressObservable): void => {
-    this.unwatch()
+  public subscribe = (observable: INavTreeKeyPressObservable): void => {
+    this.unsubscribe()
 
     this.observable = observable
     window.onkeydown = this.onKeyEventDetected
@@ -28,7 +28,7 @@ export default class NavTreeKeyPressObserver {
     }
   }
 
-  public unwatch = (): void => {
+  public unsubscribe = (): void => {
     window.onkeydown = null
     this.observable = null
   }
