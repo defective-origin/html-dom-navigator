@@ -9,7 +9,7 @@
   "scripts": {
     "lint": "eslint . --ext .ts",
     "build": "tsc",
-    "test": "jest",
+    "test": "jest --verbose",
     "build-interaction-page": "webpack"
   },
   "devDependencies": {
