@@ -12,10 +12,10 @@ export default class NavTreeKeyPressObserver {
     this.unsubscribe()
 
     this.controls = {
-      ArrowUp: observable.up,
-      ArrowDown: observable.down,
-      ArrowLeft: observable.left,
-      ArrowRight: observable.right,
+      ArrowUp: () => observable.up(),
+      ArrowDown: () => observable.down(),
+      ArrowLeft: () => observable.left(),
+      ArrowRight: () => observable.right(),
     }
     window.onkeydown = this.onKeyEventDetected
   }

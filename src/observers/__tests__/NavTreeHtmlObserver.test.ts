@@ -1,7 +1,7 @@
 import NavTreeHtmlObserver, { INavTreeHtmlObservable } from '../NavTreeHtmlObserver'
 
 class TestObservable implements INavTreeHtmlObservable {
-  elem = document.createElement('div')
+  elem: HTMLElement | null = document.createElement('div')
   build = jest.fn()
 }
 
@@ -26,6 +26,14 @@ describe('<NavTreeHtmlObserver> class', () => {
       observer.subscribe(observable)
 
       expect(observer.mutationObserver.observe).toBeCalled()
+    })
+
+    it('should not set html change event if element is not defined', () => {
+      observable.elem = null
+      observer.mutationObserver.observe = jest.fn()
+      observer.subscribe(observable)
+
+      expect(observer.mutationObserver.observe).not.toBeCalled()
     })
   })
 

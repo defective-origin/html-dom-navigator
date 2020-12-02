@@ -1,4 +1,5 @@
 import Navigator from '../Navigator'
+import NavTree from '../NavTree'
 
 describe('<Navigator> class', () => {
 
@@ -9,6 +10,7 @@ describe('<Navigator> class', () => {
 
   describe('<subscribe> method', () => {
     beforeEach(() => {
+      navigator.navTree.build = jest.fn((elem) => { navigator.navTree.elem = elem })
       navigator.navTreeHtmlObserver.subscribe = jest.fn()
       navigator.navTreeClickObserver.subscribe = jest.fn()
       navigator.navTreeKeyPressObserver.subscribe = jest.fn()
@@ -19,20 +21,34 @@ describe('<Navigator> class', () => {
 
       navigator.subscribe(elem)
 
-      expect(navigator.navTree?.elem).toEqual(elem)
+      expect(navigator.navTree.build).toBeCalled()
       expect(navigator.navTreeHtmlObserver.subscribe).toBeCalled()
       expect(navigator.navTreeClickObserver.subscribe).toBeCalled()
       expect(navigator.navTreeKeyPressObserver.subscribe).toBeCalled()
     })
 
-    it('should not do anything if previous element is equal with transferred element', () => {
+    it('should build tree and subscribe on observers if previous element is not equal with transferred element', () => {
       const previousElem = document.createElement('h1')
       const newElem = document.createElement('h2')
 
       navigator.subscribe(previousElem)
       navigator.subscribe(newElem)
 
-      expect(navigator.navTree?.elem).toEqual(previousElem)
+      expect(navigator.navTree.build).toBeCalledTimes(2)
+      expect(navigator.navTreeHtmlObserver.subscribe).toBeCalledTimes(2)
+      expect(navigator.navTreeClickObserver.subscribe).toBeCalledTimes(2)
+      expect(navigator.navTreeKeyPressObserver.subscribe).toBeCalledTimes(2)
+    })
+
+    it('should not do anything if previous element is equal with transferred element', () => {
+      const elem = document.createElement('h1')
+
+      navigator.subscribe(elem)
+      navigator.subscribe(elem)
+      navigator.subscribe(elem)
+      navigator.subscribe(elem)
+
+      expect(navigator.navTree.build).toBeCalledTimes(1)
       expect(navigator.navTreeHtmlObserver.subscribe).toBeCalledTimes(1)
       expect(navigator.navTreeClickObserver.subscribe).toBeCalledTimes(1)
       expect(navigator.navTreeKeyPressObserver.subscribe).toBeCalledTimes(1)
@@ -41,12 +57,14 @@ describe('<Navigator> class', () => {
 
   describe('<unsubscribe> method', () => {
     it('should unsubscribe from all subscriptions', () => {
+      navigator.navTree.clear = jest.fn()
       navigator.navTreeHtmlObserver.unsubscribe = jest.fn()
       navigator.navTreeClickObserver.unsubscribe = jest.fn()
       navigator.navTreeKeyPressObserver.unsubscribe = jest.fn()
 
       navigator.unsubscribe()
 
+      expect(navigator.navTree.clear).toBeCalled()
       expect(navigator.navTreeHtmlObserver.unsubscribe).toBeCalled()
       expect(navigator.navTreeClickObserver.unsubscribe).toBeCalled()
       expect(navigator.navTreeKeyPressObserver.unsubscribe).toBeCalled()
@@ -55,46 +73,31 @@ describe('<Navigator> class', () => {
 
   describe('<activateNavNodeByLabel> method', () => {
     it('should call activateNodeByLabel', () => {
-      navigator.subscribe(document.createElement('h1'))
+      navigator.subscribe(document.createElement('h1'));
+      (navigator.navTree as NavTree).activateNodeByLabel = jest.fn()
       navigator.activateNavNodeByLabel('TEST')
 
-      expect(navigator.navTree?.activateNodeByLabel).toBeCalled()
-    })
-
-    it('should not call activateNodeByLabel if nav tree is not built', () => {
-      navigator.activateNavNodeByLabel('TEST')
-
-      expect(navigator.navTree?.activateNodeByLabel).not.toBeCalled()
+      expect((navigator.navTree as NavTree).activateNodeByLabel).toBeCalled()
     })
   })
 
   describe('<activateNavNodeByUuid> method', () => {
     it('should call activateNodeByUuid', () => {
-      navigator.subscribe(document.createElement('h1'))
+      navigator.subscribe(document.createElement('h1'));
+      (navigator.navTree as NavTree).activateNodeByUuid = jest.fn()
       navigator.activateNavNodeByUuid('TEST')
 
-      expect(navigator.navTree?.activateNodeByUuid).toBeCalled()
-    })
-
-    it('should not call activateNodeByUuid if nav tree is not built', () => {
-      navigator.activateNavNodeByUuid('TEST')
-
-      expect(navigator.navTree?.activateNodeByUuid).not.toBeCalled()
+      expect((navigator.navTree as NavTree).activateNodeByUuid).toBeCalled()
     })
   })
 
   describe('<deactivateNavNode> method', () => {
     it('should call deactivateNode', () => {
-      navigator.subscribe(document.createElement('h1'))
+      navigator.subscribe(document.createElement('h1'));
+      (navigator.navTree as NavTree).deactivateNode = jest.fn()
       navigator.deactivateNavNode()
 
-      expect(navigator.navTree?.deactivateNode).toBeCalled()
-    })
-
-    it('should not call deactivateNode if nav tree is not built', () => {
-      navigator.deactivateNavNode()
-
-      expect(navigator.navTree?.deactivateNode).not.toBeCalled()
+      expect((navigator.navTree as NavTree).deactivateNode).toBeCalled()
     })
   })
 })

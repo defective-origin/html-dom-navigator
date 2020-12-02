@@ -6,18 +6,10 @@ import { INavTreeClickObservable } from './observers/NavTreeClickObserver'
 export default class NavTree implements INavTreeHtmlObservable,
                                         INavTreeKeyPressObservable,
                                         INavTreeClickObservable {
-  public elem: HTMLElement
-  public rootNode: NavTreeNode
+  public elem: HTMLElement | null = null
   public nodeMapByUuid: Record<string, NavTreeNode> = {}
   public nodeMapByLabel: Record<string, NavTreeNode> = {}
   public activeNode: NavTreeNode | null = null
-
-  constructor(elem: HTMLElement) {
-    this.elem = elem
-    this.rootNode = new NavTreeNode(elem)
-    this.parseHtml(elem, this.rootNode)
-    this.activateNode(this.rootNode)
-  }
 
   protected parseHtml(elem: HTMLElement, parent: NavTreeNode): void {
     for (let index = 0; index < elem.children.length; index += 1) {
@@ -44,19 +36,32 @@ export default class NavTree implements INavTreeHtmlObservable,
     }
   }
 
-  public build(): void {
+  public build(elem: HTMLElement | null): void {
+    if (!elem) {
+      return
+    }
+
     const prevActiveNavItemUuid = this.activeNode?.uuid as string
-    this.nodeMapByUuid = {}
-    this.nodeMapByLabel = {}
-    this.rootNode = new NavTreeNode(this.elem)
-    this.deactivateNode()
-    this.parseHtml(this.elem, this.rootNode)
+    const rootNode = new NavTreeNode(elem)
+
+    this.clear()
+
+    this.elem = elem
+
+    this.parseHtml(elem, rootNode)
 
     if (this.nodeMapByUuid[prevActiveNavItemUuid]) {
       this.activateNodeByUuid(prevActiveNavItemUuid)
     } else {
-      this.activateNode(this.rootNode)
+      this.activateNode(rootNode)
     }
+  }
+
+  public clear(): void {
+    this.elem = null
+    this.nodeMapByUuid = {}
+    this.nodeMapByLabel = {}
+    this.deactivateNode()
   }
 
   public activateNodeByLabel(key: string): void {
