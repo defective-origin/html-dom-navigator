@@ -18,15 +18,15 @@ export default class Navigator {
     }
   }
 
-  public activateNavItemByLabel(key: string): void {
+  public activateNavNodeByLabel(key: string): void {
     this.navTree?.activateNodeByLabel(key)
   }
 
-  public activateNavItemByUuid(key: string): void {
+  public activateNavNodeByUuid(key: string): void {
     this.navTree?.activateNodeByUuid(key)
   }
 
-  public deactivateNavItem(): void {
+  public deactivateNavNode(): void {
     this.navTree?.deactivateNode()
   }
 
