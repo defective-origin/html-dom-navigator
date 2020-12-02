@@ -1,7 +1,7 @@
 export interface INavTreeHtmlObservable {
   elem: HTMLElement
 
-  rebuild(): void
+  build(): void
 }
 
 export default class NavTreeHtmlObserver {
@@ -26,7 +26,7 @@ export default class NavTreeHtmlObserver {
   }
 
   public onHtmlChangeDetected = (): void => {
-    this.observable?.rebuild()
+    this.observable?.build()
   }
 
   public unsubscribe = (): void => {

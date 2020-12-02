@@ -15,11 +15,11 @@ export default class NavTree implements INavTreeHtmlObservable,
   constructor(elem: HTMLElement) {
     this.elem = elem
     this.rootNode = new NavTreeNode(elem)
-    this.build(elem, this.rootNode)
+    this.parseHtml(elem, this.rootNode)
     this.activateNode(this.rootNode)
   }
 
-  protected build(elem: HTMLElement, parent: NavTreeNode): void {
+  protected parseHtml(elem: HTMLElement, parent: NavTreeNode): void {
     for (let index = 0; index < elem.children.length; index += 1) {
 
       const childElem = elem.children[index] as HTMLElement
@@ -28,10 +28,10 @@ export default class NavTree implements INavTreeHtmlObservable,
         this.registerNode(childNode)
 
         if (childNode.type !== NavItemTypes.Item) {
-          this.build(childElem, childNode)
+          this.parseHtml(childElem, childNode)
         }
       } else {
-        this.build(childElem, parent)
+        this.parseHtml(childElem, parent)
       }
     }
   }
@@ -44,13 +44,13 @@ export default class NavTree implements INavTreeHtmlObservable,
     }
   }
 
-  public rebuild(): void {
+  public build(): void {
     const prevActiveNavItemUuid = this.activeNode?.uuid as string
     this.nodeMapByUuid = {}
     this.nodeMapByLabel = {}
     this.rootNode = new NavTreeNode(this.elem)
     this.deactivateNode()
-    this.build(this.elem, this.rootNode)
+    this.parseHtml(this.elem, this.rootNode)
 
     if (this.nodeMapByUuid[prevActiveNavItemUuid]) {
       this.activateNodeByUuid(prevActiveNavItemUuid)
