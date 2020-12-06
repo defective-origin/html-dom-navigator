@@ -6,12 +6,13 @@ declare global {
   }
 }
 
+// inject navigator to window
 if (typeof window !== 'undefined') {
   window.HtmlDomNavigator = new Navigator()
 }
 
 // TODO: add documentation to repo
-// TODO: add documentations for classes, methods, files, tests
-// TODO: add tests
+// TODO: check tests after all
+// TODO: check scrollIntoView
 // TODO: implement nice styles for interaction test page
 // TODO: register package in npm

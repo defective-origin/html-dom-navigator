@@ -40,38 +40,47 @@ export default class NavTreeNode {
     }
   }
 
+  /** Return type of element. */
   public get type(): string | null {
     return this.elem.dataset[NavNodeDataAttrs.NavType] || null
   }
 
+  /** Return uuid of element. */
   public get uuid(): string {
     return this.elem.dataset[NavNodeDataAttrs.NavUuid] as string
   }
 
+  /** Return user label of element if it exists otherwise null. */
   public get label(): string | null {
     return this.elem.dataset[NavNodeDataAttrs.NavLabel] || null
   }
 
+  /** Return true if node is active otherwise false. */
   public get isActive(): boolean {
     return Boolean(this.elem.dataset[NavNodeDataAttrs.ActiveNavItem])
   }
 
+  /** Return true if node has the same type otherwise false. */
   public hasType(type: NavNodeTypes): boolean {
     return this.type === type
   }
 
+  /** Return child node by index if it exist otherwise null. */
   public getChildNode(index: number): NavTreeNode | null {
     return this.children[index] || null
   }
 
+  /** Return first child node if it exists otherwise null. */
   public getFirstChildNode(): NavTreeNode | null {
     return this.getChildNode(0)
   }
 
+  /** Return true if element has data-nav attribute otherwise false. */
   public static hasNavTypeAttribute(elem: HTMLElement): boolean {
     return Boolean(elem.dataset[NavNodeDataAttrs.NavType])
   }
 
+  /** Activate node if it is not active. */
   public activate(): void {
     if (!this.isActive && this.type === NavNodeTypes.Item) {
       this.elem.dataset[NavNodeDataAttrs.ActiveNavItem] = 'true'
@@ -80,6 +89,7 @@ export default class NavTreeNode {
     }
   }
 
+  /** Deactivate node if it is active. */
   public deactivate(): void {
     if (this.isActive) {
       this.elem.blur()

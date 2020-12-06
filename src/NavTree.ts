@@ -12,6 +12,8 @@ export default class NavTree implements INavTreeHtmlObservable,
   public activeNode: NavTreeNode | null = null
 
   // TODO: rewrite with returning root node
+  /**
+   * Parse html and build navigation tree. */
   public parseHtml(elem: HTMLElement, parent: NavTreeNode): void {
     for (let index = 0; index < elem.children.length; index += 1) {
 
@@ -29,6 +31,7 @@ export default class NavTree implements INavTreeHtmlObservable,
     }
   }
 
+  /** Register node to uuid and label node maps. */
   public registerNode(node: NavTreeNode): void {
     this.nodeMapByUuid[node.uuid] = node
 
@@ -58,6 +61,7 @@ export default class NavTree implements INavTreeHtmlObservable,
     }
   }
 
+  /** Deactivate active node and clear navigation tree. */
   public clear(): void {
     this.elem = null
     this.nodeMapByUuid = {}
@@ -65,16 +69,28 @@ export default class NavTree implements INavTreeHtmlObservable,
     this.deactivateNode()
   }
 
+  /**
+   * Activate navigation node by label if only node navigation type is item
+   * otherwise activate first child node.
+   */
   public activateNodeByLabel(key: string): void {
     const node = this.nodeMapByLabel[key]
     this.activateNode(node)
   }
 
+  /**
+   * Activate navigation node by UUID if only node navigation type is item
+   * otherwise activate first child node.
+   */
   public activateNodeByUuid(key: string): void {
     const node = this.nodeMapByUuid[key]
     this.activateNode(node)
   }
 
+  /**
+   * Activate navigation node if only node navigation type is item
+   * otherwise activate first child node.
+   */
   public activateNode(node: NavTreeNode | null = null): void {
     if (!node || node.uuid === this.activeNode?.uuid) {
       return
@@ -90,11 +106,13 @@ export default class NavTree implements INavTreeHtmlObservable,
     }
   }
 
+  /** Deactivate current active navigation node. */
   public deactivateNode(): void {
     this.activeNode?.deactivate()
     this.activeNode = null
   }
 
+  /** Find and activate node by type and offset. */
   public move(node: NavTreeNode | null, type: NavNodeTypes, offset: number): void {
     if (!node || !node.parent) {
       return
@@ -109,18 +127,22 @@ export default class NavTree implements INavTreeHtmlObservable,
     }
   }
 
+  /** Activate previous node in row. */
   public up(): void {
     this.move(this.activeNode, NavNodeTypes.Row, Offset.Prev)
   }
 
+  /** Activate next node in row. */
   public down(): void {
     this.move(this.activeNode, NavNodeTypes.Row, Offset.Next)
   }
 
+  /** Activate previous node in column. */
   public left(): void {
     this.move(this.activeNode, NavNodeTypes.Column, Offset.Prev)
   }
 
+  /** Activate next next in column. */
   public right(): void {
     this.move(this.activeNode, NavNodeTypes.Column, Offset.Next)
   }
