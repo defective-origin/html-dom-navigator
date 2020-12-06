@@ -11,5 +11,7 @@ if (typeof window !== 'undefined') {
 }
 
 // TODO: add documentation to repo
+// TODO: add documentations for classes, methods, files, tests
 // TODO: add tests
 // TODO: implement nice styles for interaction test page
+// TODO: register package in npm

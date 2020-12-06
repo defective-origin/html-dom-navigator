@@ -1,4 +1,4 @@
-import NavTreeNode, { NavItemDataAttrs, NavItemTypes } from '../NavTreeNode'
+import NavTreeNode, { NavNodeDataAttrs, NavNodeTypes } from '../NavTreeNode'
 
 describe('<NavTreeNode> class', () => {
 
@@ -30,14 +30,14 @@ describe('<NavTreeNode> class', () => {
     })
 
     it('should not set uuid if it is set already', () => {
-      elem.dataset[NavItemDataAttrs.NavUuid] = 'TEST'
+      elem.dataset[NavNodeDataAttrs.NavUuid] = 'TEST'
       const node = new NavTreeNode(elem)
 
       expect(node.uuid).toEqual('TEST')
     })
 
     it('should set tabindex = -1 for node with type ITEM in order to navigate by it', () => {
-      elem.dataset[NavItemDataAttrs.NavType] = NavItemTypes.Item
+      elem.dataset[NavNodeDataAttrs.NavType] = NavNodeTypes.Item
       const node = new NavTreeNode(elem)
 
       expect(elem.tabIndex).toEqual(-1)
@@ -47,10 +47,10 @@ describe('<NavTreeNode> class', () => {
 
   describe('<type> getter', () => {
     it('should return type', () => {
-      elem.dataset[NavItemDataAttrs.NavType] = NavItemTypes.Item
+      elem.dataset[NavNodeDataAttrs.NavType] = NavNodeTypes.Item
       const node = new NavTreeNode(elem)
 
-      expect(node.type).toEqual(NavItemTypes.Item)
+      expect(node.type).toEqual(NavNodeTypes.Item)
     })
 
     it('should return null if type is not defined', () => {
@@ -62,7 +62,7 @@ describe('<NavTreeNode> class', () => {
 
   describe('<label> getter', () => {
     it('should return label', () => {
-      elem.dataset[NavItemDataAttrs.NavLabel] = 'TEST'
+      elem.dataset[NavNodeDataAttrs.NavLabel] = 'TEST'
       const node = new NavTreeNode(elem)
 
       expect(node.label).toEqual('TEST')
@@ -77,7 +77,7 @@ describe('<NavTreeNode> class', () => {
 
   describe('<uuid> getter', () => {
     it('should return uuid', () => {
-      elem.dataset[NavItemDataAttrs.NavUuid] = 'TEST'
+      elem.dataset[NavNodeDataAttrs.NavUuid] = 'TEST'
       const node = new NavTreeNode(elem)
 
       expect(node.uuid).toEqual('TEST')
@@ -86,7 +86,7 @@ describe('<NavTreeNode> class', () => {
 
   describe('<isActive> getter', () => {
     it('should return true if attribute is defined', () => {
-      elem.dataset[NavItemDataAttrs.ActiveNavItem] = 'true'
+      elem.dataset[NavNodeDataAttrs.ActiveNavItem] = 'true'
       const node = new NavTreeNode(elem)
 
       expect(node.isActive).toEqual(true)
@@ -101,16 +101,16 @@ describe('<NavTreeNode> class', () => {
 
   describe('<hasType> method', () => {
     it('should return true if type is equal', () => {
-      elem.dataset[NavItemDataAttrs.NavType] = NavItemTypes.Row
+      elem.dataset[NavNodeDataAttrs.NavType] = NavNodeTypes.Row
       const node = new NavTreeNode(elem)
 
-      expect(node.hasType(NavItemTypes.Row)).toEqual(true)
+      expect(node.hasType(NavNodeTypes.Row)).toEqual(true)
     })
 
     it('should return false if type is not equal', () => {
       const node = new NavTreeNode(elem)
 
-      expect(node.hasType(NavItemTypes.Row)).toEqual(false)
+      expect(node.hasType(NavNodeTypes.Row)).toEqual(false)
     })
   })
 
@@ -154,7 +154,7 @@ describe('<NavTreeNode> class', () => {
 
   describe('<hasNavTypeAttribute> static method', () => {
     it('should return true if type is defined', () => {
-      elem.dataset[NavItemDataAttrs.NavType] = NavItemTypes.Item
+      elem.dataset[NavNodeDataAttrs.NavType] = NavNodeTypes.Item
 
       expect(NavTreeNode.hasNavTypeAttribute(elem)).toEqual(true)
     })
@@ -168,7 +168,7 @@ describe('<NavTreeNode> class', () => {
     beforeEach(() => {
       elem.focus = jest.fn()
       elem.scrollIntoView = jest.fn()
-      elem.dataset[NavItemDataAttrs.NavType] = NavItemTypes.Item
+      elem.dataset[NavNodeDataAttrs.NavType] = NavNodeTypes.Item
     })
 
     it('should set active attribute', () => {
@@ -189,7 +189,7 @@ describe('<NavTreeNode> class', () => {
     })
 
     it('should not activate again if node is active already', () => {
-      elem.dataset[NavItemDataAttrs.ActiveNavItem] = 'true'
+      elem.dataset[NavNodeDataAttrs.ActiveNavItem] = 'true'
       const node = new NavTreeNode(elem)
 
       node.activate()
@@ -198,7 +198,7 @@ describe('<NavTreeNode> class', () => {
     })
 
     it('should not activate again if type is not item', () => {
-      elem.dataset[NavItemDataAttrs.NavType] = NavItemTypes.Row
+      elem.dataset[NavNodeDataAttrs.NavType] = NavNodeTypes.Row
       const node = new NavTreeNode(elem)
 
       node.activate()
@@ -221,7 +221,7 @@ describe('<NavTreeNode> class', () => {
     })
 
     it('should blur from element', () => {
-      elem.dataset[NavItemDataAttrs.ActiveNavItem] = 'true'
+      elem.dataset[NavNodeDataAttrs.ActiveNavItem] = 'true'
       const node = new NavTreeNode(elem)
 
       node.deactivate()

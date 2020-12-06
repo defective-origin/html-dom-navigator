@@ -1,4 +1,4 @@
-import NavTreeNode, { NavItemTypes, Offset } from './NavTreeNode'
+import NavTreeNode, { NavNodeTypes, Offset } from './NavTreeNode'
 import { INavTreeKeyPressObservable } from './observers/NavTreeKeyPressObserver'
 import { INavTreeHtmlObservable } from './observers/NavTreeHtmlObserver'
 import { INavTreeClickObservable } from './observers/NavTreeClickObserver'
@@ -11,7 +11,8 @@ export default class NavTree implements INavTreeHtmlObservable,
   public nodeMapByLabel: Record<string, NavTreeNode> = {}
   public activeNode: NavTreeNode | null = null
 
-  protected parseHtml(elem: HTMLElement, parent: NavTreeNode): void {
+  // TODO: rewrite with returning root node
+  public parseHtml(elem: HTMLElement, parent: NavTreeNode): void {
     for (let index = 0; index < elem.children.length; index += 1) {
 
       const childElem = elem.children[index] as HTMLElement
@@ -19,7 +20,7 @@ export default class NavTree implements INavTreeHtmlObservable,
         const childNode = new NavTreeNode(childElem, parent)
         this.registerNode(childNode)
 
-        if (childNode.type !== NavItemTypes.Item) {
+        if (childNode.type !== NavNodeTypes.Item) {
           this.parseHtml(childElem, childNode)
         }
       } else {
@@ -28,7 +29,7 @@ export default class NavTree implements INavTreeHtmlObservable,
     }
   }
 
-  protected registerNode(node: NavTreeNode): void {
+  public registerNode(node: NavTreeNode): void {
     this.nodeMapByUuid[node.uuid] = node
 
     if (node.label) {
@@ -36,8 +37,8 @@ export default class NavTree implements INavTreeHtmlObservable,
     }
   }
 
-  public build(elem: HTMLElement | null): void {
-    if (!elem) {
+  public build(elem: HTMLElement | null = null): void {
+    if (!elem || !NavTreeNode.hasNavTypeAttribute(elem)) {
       return
     }
 
@@ -74,15 +75,15 @@ export default class NavTree implements INavTreeHtmlObservable,
     this.activateNode(node)
   }
 
-  public activateNode(node: NavTreeNode | null): void {
+  public activateNode(node: NavTreeNode | null = null): void {
     if (!node || node.uuid === this.activeNode?.uuid) {
       return
     }
 
-    if (node.hasType(NavItemTypes.Item)) {
-      this.activeNode?.deactivate()
+    if (node.hasType(NavNodeTypes.Item)) {
+      this.deactivateNode()
       this.activeNode = node
-      this.activeNode?.activate()
+      node.activate()
     } else {
       const childNode = node.getFirstChildNode()
       this.activateNode(childNode)
@@ -94,7 +95,7 @@ export default class NavTree implements INavTreeHtmlObservable,
     this.activeNode = null
   }
 
-  protected move(node: NavTreeNode | null, type: NavItemTypes, offset: number): void {
+  public move(node: NavTreeNode | null, type: NavNodeTypes, offset: number): void {
     if (!node || !node.parent) {
       return
     }
@@ -109,18 +110,18 @@ export default class NavTree implements INavTreeHtmlObservable,
   }
 
   public up(): void {
-    this.move(this.activeNode, NavItemTypes.Row, Offset.Prev)
+    this.move(this.activeNode, NavNodeTypes.Row, Offset.Prev)
   }
 
   public down(): void {
-    this.move(this.activeNode, NavItemTypes.Row, Offset.Next)
+    this.move(this.activeNode, NavNodeTypes.Row, Offset.Next)
   }
 
   public left(): void {
-    this.move(this.activeNode, NavItemTypes.Column, Offset.Prev)
+    this.move(this.activeNode, NavNodeTypes.Column, Offset.Prev)
   }
 
   public right(): void {
-    this.move(this.activeNode, NavItemTypes.Column, Offset.Next)
+    this.move(this.activeNode, NavNodeTypes.Column, Offset.Next)
   }
 }

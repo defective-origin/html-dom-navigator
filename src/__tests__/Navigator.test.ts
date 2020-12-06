@@ -10,7 +10,7 @@ describe('<Navigator> class', () => {
 
   describe('<subscribe> method', () => {
     beforeEach(() => {
-      navigator.navTree.build = jest.fn((elem) => { navigator.navTree.elem = elem })
+      navigator.navTree.build = jest.fn((elem = null) => { navigator.navTree.elem = elem })
       navigator.navTreeHtmlObserver.subscribe = jest.fn()
       navigator.navTreeClickObserver.subscribe = jest.fn()
       navigator.navTreeKeyPressObserver.subscribe = jest.fn()
@@ -21,10 +21,10 @@ describe('<Navigator> class', () => {
 
       navigator.subscribe(elem)
 
-      expect(navigator.navTree.build).toBeCalled()
-      expect(navigator.navTreeHtmlObserver.subscribe).toBeCalled()
-      expect(navigator.navTreeClickObserver.subscribe).toBeCalled()
-      expect(navigator.navTreeKeyPressObserver.subscribe).toBeCalled()
+      expect(navigator.navTree.build).toBeCalledWith(elem)
+      expect(navigator.navTreeHtmlObserver.subscribe).toBeCalledWith(navigator.navTree)
+      expect(navigator.navTreeClickObserver.subscribe).toBeCalledWith(navigator.navTree)
+      expect(navigator.navTreeKeyPressObserver.subscribe).toBeCalledWith(navigator.navTree)
     })
 
     it('should build tree and subscribe on observers if previous element is not equal with transferred element', () => {
@@ -77,7 +77,7 @@ describe('<Navigator> class', () => {
       (navigator.navTree as NavTree).activateNodeByLabel = jest.fn()
       navigator.activateNavNodeByLabel('TEST')
 
-      expect((navigator.navTree as NavTree).activateNodeByLabel).toBeCalled()
+      expect((navigator.navTree as NavTree).activateNodeByLabel).toBeCalledWith('TEST')
     })
   })
 
@@ -87,7 +87,7 @@ describe('<Navigator> class', () => {
       (navigator.navTree as NavTree).activateNodeByUuid = jest.fn()
       navigator.activateNavNodeByUuid('TEST')
 
-      expect((navigator.navTree as NavTree).activateNodeByUuid).toBeCalled()
+      expect((navigator.navTree as NavTree).activateNodeByUuid).toBeCalledWith('TEST')
     })
   })
 

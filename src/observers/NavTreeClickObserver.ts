@@ -1,4 +1,4 @@
-import { NavItemDataAttrs, NavItemTypes } from '../NavTreeNode'
+import { NavNodeDataAttrs, NavNodeTypes } from '../NavTreeNode'
 
 export interface INavTreeClickObservable {
   activateNodeByUuid(node: string): void
@@ -15,10 +15,10 @@ export default class NavTreeClickObserver {
   }
 
   public onClickEventDetected = (event: MouseEvent): void => {
-    const elem = (event.target as HTMLElement).closest<HTMLElement>(`[data-nav="${NavItemTypes.Item}"]`)
+    const elem = (event.target as HTMLElement).closest<HTMLElement>(`[data-nav="${NavNodeTypes.Item}"]`)
 
     if (elem && this.observable) {
-      this.observable.activateNodeByUuid(elem.dataset[NavItemDataAttrs.NavUuid] as string)
+      this.observable.activateNodeByUuid(elem.dataset[NavNodeDataAttrs.NavUuid] as string)
     }
   }
 

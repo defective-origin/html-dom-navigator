@@ -53,7 +53,7 @@ describe('<NavTreeHtmlObserver> class', () => {
       observer.subscribe(observable)
       observer.onHtmlChangeDetected()
 
-      expect(observable.build).toBeCalled()
+      expect(observable.build).toBeCalledWith(observable.elem)
     })
 
     it('should not handle html change event if observable is not set', () => {

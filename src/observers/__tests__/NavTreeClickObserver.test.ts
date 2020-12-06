@@ -1,4 +1,4 @@
-import { NavItemDataAttrs, NavItemTypes } from '../../NavTreeNode'
+import { NavNodeDataAttrs, NavNodeTypes } from '../../NavTreeNode'
 import NavTreeClickObserver, { INavTreeClickObservable } from '../NavTreeClickObserver'
 
 class TestObservable implements INavTreeClickObservable {
@@ -48,11 +48,11 @@ describe('<NavTreeClickObserver> class', () => {
     })
 
     it('should handle click event', () => {
-      elem.dataset[NavItemDataAttrs.NavType] = NavItemTypes.Item
+      elem.dataset[NavNodeDataAttrs.NavType] = NavNodeTypes.Item
       observer.subscribe(observable)
       observer.onClickEventDetected(event)
 
-      expect(observable.activateNodeByUuid).toBeCalled()
+      expect(observable.activateNodeByUuid).toBeCalledWith(elem.dataset[NavNodeDataAttrs.NavUuid])
     })
 
     it('should not handle click event if element with nav item attribute is not return by elem.closest()', () => {

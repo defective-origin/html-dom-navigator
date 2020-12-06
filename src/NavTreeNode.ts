@@ -1,12 +1,12 @@
 import { v4 as uuidv4 } from 'uuid'
 
-export enum NavItemTypes {
+export enum NavNodeTypes {
   Row = 'row',
   Column = 'column',
   Item = 'item',
 }
 
-export enum NavItemDataAttrs {
+export enum NavNodeDataAttrs {
   NavType = 'nav',
   NavLabel = 'navLabel',
   NavUuid = 'navUuid',
@@ -31,32 +31,32 @@ export default class NavTreeNode {
       parent.children.push(this)
     }
 
-    if (this.hasType(NavItemTypes.Item)) {
+    if (this.hasType(NavNodeTypes.Item)) {
       this.elem.tabIndex = -1 // in order to navigate programmatically and elem.focus() works
     }
 
-    if (!this.elem.dataset[NavItemDataAttrs.NavUuid]) {
-      this.elem.dataset[NavItemDataAttrs.NavUuid] = uuidv4()
+    if (!this.elem.dataset[NavNodeDataAttrs.NavUuid]) {
+      this.elem.dataset[NavNodeDataAttrs.NavUuid] = uuidv4()
     }
   }
 
   public get type(): string | null {
-    return this.elem.dataset[NavItemDataAttrs.NavType] || null
+    return this.elem.dataset[NavNodeDataAttrs.NavType] || null
   }
 
   public get uuid(): string {
-    return this.elem.dataset[NavItemDataAttrs.NavUuid] as string
+    return this.elem.dataset[NavNodeDataAttrs.NavUuid] as string
   }
 
   public get label(): string | null {
-    return this.elem.dataset[NavItemDataAttrs.NavLabel] || null
+    return this.elem.dataset[NavNodeDataAttrs.NavLabel] || null
   }
 
   public get isActive(): boolean {
-    return Boolean(this.elem.dataset[NavItemDataAttrs.ActiveNavItem])
+    return Boolean(this.elem.dataset[NavNodeDataAttrs.ActiveNavItem])
   }
 
-  public hasType(type: NavItemTypes): boolean {
+  public hasType(type: NavNodeTypes): boolean {
     return this.type === type
   }
 
@@ -69,12 +69,12 @@ export default class NavTreeNode {
   }
 
   public static hasNavTypeAttribute(elem: HTMLElement): boolean {
-    return Boolean(elem.dataset[NavItemDataAttrs.NavType])
+    return Boolean(elem.dataset[NavNodeDataAttrs.NavType])
   }
 
   public activate(): void {
-    if (!this.isActive && this.type === NavItemTypes.Item) {
-      this.elem.dataset[NavItemDataAttrs.ActiveNavItem] = 'true'
+    if (!this.isActive && this.type === NavNodeTypes.Item) {
+      this.elem.dataset[NavNodeDataAttrs.ActiveNavItem] = 'true'
       this.elem.focus()
       this.elem.scrollIntoView({ block: 'center', inline: 'center', behavior: 'smooth' }) // scroll to a focused element when we have a scroll
     }
@@ -83,7 +83,7 @@ export default class NavTreeNode {
   public deactivate(): void {
     if (this.isActive) {
       this.elem.blur()
-      delete this.elem.dataset[NavItemDataAttrs.ActiveNavItem]
+      delete this.elem.dataset[NavNodeDataAttrs.ActiveNavItem]
     }
   }
 }
