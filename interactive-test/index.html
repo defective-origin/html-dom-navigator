@@ -85,7 +85,9 @@
       }
 
       .button {
-        padding: 5px 10px;
+        display: block;
+        padding: 10px;
+        text-align: center;
         background: #e6bc88;
         border: 1px solid #7272e2ad;
         border-radius: 3px;
@@ -225,9 +227,9 @@
           </section>
         </article>
       </main>
-    </div>
-    <div class="actions">
-      <button class="button" onclick="removeNode()">Remove</button>
+      <div class="actions">
+        <button class="button" data-nav="item" onclick="removeNode()">Remove</button>
+      </div>
     </div>
     <script>
       const elem = document.getElementById('root')
