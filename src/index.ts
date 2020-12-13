@@ -12,5 +12,3 @@ if (typeof window !== 'undefined') {
 }
 
 // TODO: add images to readme.md
-// TODO: check tests after all
-// TODO: register package in npm
