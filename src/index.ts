@@ -11,8 +11,6 @@ if (typeof window !== 'undefined') {
   window.HtmlDomNavigator = new Navigator()
 }
 
-// TODO: add documentation to repo
+// TODO: add images to readme.md
 // TODO: check tests after all
-// TODO: check scrollIntoView
-// TODO: implement nice styles for interaction test page
 // TODO: register package in npm

@@ -12,7 +12,7 @@
       .none {
         box-sizing: border-box;
         padding: 24px 10px 10px 10px ;
-        border: 1px solid black;
+        border: 1px solid #afafaf63;
         display: flex;
         align-content: stretch;
         width: 100%;
@@ -46,26 +46,49 @@
       }
 
       [data-nav="item"] {
-        background: green;
+        background: #3596354d;
+        border-radius: 3px;
+        outline: none;
       }
 
       .none::after {
         content: "Type: none";
       }
 
+      [data-nav="row"] > [data-nav="item"],
+      .none > [data-nav="item"] {
+        margin: 3px 0;
+      }
+
       [data-nav="column"] > [data-nav="item"] {
-        background: gray;
+        background: #8969ea5e;
         width: min-content;
+        margin: 0 3px;
       }
 
       [data-nav][data-active-nav-item="true"] {
-        background: orange;
+        background: #f9282861;
+        border: 1px solid rgb(132, 69, 161);
       }
 
       .scroll {
         height: 400px;
         overflow-x: hidden;
         overflow-y: scroll;
+      }
+
+      .actions {
+        display: flex;
+        padding: 10px;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .button {
+        padding: 5px 10px;
+        background: #e6bc88;
+        border: 1px solid #7272e2ad;
+        border-radius: 3px;
       }
     </style>
     <div id="root" data-nav="row">
@@ -203,7 +226,9 @@
         </article>
       </main>
     </div>
-    <button onclick="removeNode()">Remove</button>
+    <div class="actions">
+      <button class="button" onclick="removeNode()">Remove</button>
+    </div>
     <script>
       const elem = document.getElementById('root')
       window.HtmlDomNavigator.subscribe(elem)
