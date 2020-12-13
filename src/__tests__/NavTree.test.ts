@@ -205,7 +205,28 @@ describe('<NavTree> class', () => {
   })
 
   describe('<activateNode> method', () => {
-    // TODO: write 2d example
+    /*
+      n - node
+      X - active node
+      (number) - uuid
+
+      if node is container then set first child activateNode(1)
+
+                   c(1)                            c(1)
+                /       \                       /       \
+              c(2)      c(3)         ->      c(2)      c(3)
+             /   |      |   \               /   |      |   \
+          n(4) n(5)   n(6) n(7)          X(4) n(5)   n(6) n(7)
+
+      if node is item then deactivate previous node activateNode(6)
+
+                   c(1)                            c(1)
+                /       \                       /       \
+              c(2)      c(3)         ->      c(2)      c(3)
+             /   |      |   \               /   |      |   \
+          X(4) n(5)   n(6) n(7)          n(4) n(5)   X(6) n(7)
+    */
+
     it('should not activate node if node is not transferred', () => {
       navTree.activateNode()
 
@@ -225,6 +246,21 @@ describe('<NavTree> class', () => {
     })
 
     it('should deactivate previous active node', () => {
+      /*
+        n - node
+        c - node container
+        X - active node
+        (number) - uuid
+
+        activateNode(4) -> activateNode(6)
+
+                     c(1)                            c(1)
+                  /       \                       /       \
+                c(2)      c(3)         ->      c(2)      c(3)
+               /   |      |   \               /   |      |   \
+            X(4) n(5)   n(6) n(7)          n(4) n(5)   X(6) n(7)
+      */
+
       const prevElem = document.createElement('div')
       prevElem.dataset[NavNodeDataAttrs.NavType] = NavNodeTypes.Item
       const prevNode = new NavTreeNode(prevElem)
@@ -241,6 +277,21 @@ describe('<NavTree> class', () => {
     })
 
     it('should activate node if node has nav type Item', () => {
+      /*
+        n - node
+        c - node container
+        X - active node
+        (number) - uuid
+
+        activateNode(5)
+
+                     c(1)                            c(1)
+                  /       \                       /       \
+                c(2)      c(3)         ->      c(2)      c(3)
+               /   |      |   \               /   |      |   \
+            n(4) n(5)   n(6) n(7)          n(4) X(5)   n(6) n(7)
+      */
+
       const node = new NavTreeNode(document.createElement('div'))
       node.elem.dataset[NavNodeDataAttrs.NavType] = NavNodeTypes.Item
       node.activate = jest.fn()
@@ -251,6 +302,21 @@ describe('<NavTree> class', () => {
     })
 
     it('should find first nested nav item by first child node if node nav type is not Item', () => {
+      /*
+        n - node
+        c - node container
+        X - active node
+        (number) - uuid
+
+        activateNode(1) -> activateNode(3)
+
+                     c(1)                            c(1)
+                  /       \                       /       \
+                c(2)      c(3)         ->      c(2)      c(3)
+               /   |      |   \               /   |      |   \
+            X(4) n(5)   n(6) n(7)          n(4) n(5)   X(6) n(7)
+      */
+
       const node1 = new NavTreeNode(document.createElement('div'))
       node1.elem.dataset[NavNodeDataAttrs.NavType] = NavNodeTypes.Row
 
@@ -290,7 +356,41 @@ describe('<NavTree> class', () => {
   })
 
   describe('<move> method', () => {
-    // TODO: write 2d example
+    /*
+      n - node
+      c - node container
+      X - active node
+      (number) - uuid
+
+      move(2, COLUMN, +1)
+
+               c(1)                              c(1)
+            /       \             ->          /       \
+          X(2)      n(3)                     n(2)     X(3)
+
+      move(3, COLUMN, -1)
+
+               c(1)                              c(1)
+            /       \             ->          /       \
+          n(2)      X(3)                     X(2)     n(3)
+
+      move(5, TYPE, +1)
+
+                   c(1)                              c(1)
+                /       \                         /       \
+              c(2)      c(3)         ->         c(2)      c(3)
+             /   |      |   \                  /   |      |   \
+          n(4) X(5)   n(6) n(7)             n(4) n(5)   X(6) n(7)
+
+      move(6, TYPE, -1)
+
+                   c(1)                              c(1)
+                /       \                         /       \
+              c(2)      c(3)         ->         c(2)      c(3)
+             /   |      |   \                  /   |      |   \
+          n(4) n(5)   X(6) n(7)             n(4) X(5)   n(6) n(7)
+    */
+
     it('should not look for next node if node is not transferred', () => {
       const node = new NavTreeNode(document.createElement('div'))
       navTree.activeNode = node
@@ -311,6 +411,25 @@ describe('<NavTree> class', () => {
     })
 
     it('should activate next node if parent node type is equal transferred type', () => {
+      /*
+        n - node
+        c - node container
+        X - active node
+        (number) - uuid
+
+        move(2, COLUMN, +1)
+
+                     c(1)                             c(1)
+                  /       \             ->          /       \
+                X(2)      n(3)                     n(2)     X(3)
+
+        move(3, COLUMN, -1)
+
+                     c(1)                              c(1)
+                  /       \             ->          /       \
+                n(2)      X(3)                     X(2)     n(3)
+      */
+
       const blockNode = new NavTreeNode(document.createElement('div'))
       blockNode.elem.dataset[NavNodeDataAttrs.NavType] = NavNodeTypes.Row
       const navNode1 = new NavTreeNode(document.createElement('h1'), blockNode)
@@ -323,6 +442,25 @@ describe('<NavTree> class', () => {
     })
 
     it('should activate next node if parent contains child by current child index + offset', () => {
+      /*
+        n - node
+        c - node container
+        X - active node
+        (number) - uuid
+
+        move(2, COLUMN, +2)
+
+                       c(1)                                   c(1)
+                  /     |      \            ->           /     |      \
+                X(2)   n(3)   n(4)                     n(2)   n(3)   X(4)
+
+        move(4, COLUMN, -2)
+
+                       c(1)                                   c(1)
+                  /     |      \            ->           /     |      \
+                n(2)   n(3)   X(4)                     X(2)   n(3)   n(4)
+      */
+
       const blockNode = new NavTreeNode(document.createElement('div'))
       blockNode.elem.dataset[NavNodeDataAttrs.NavType] = NavNodeTypes.Row
       const navNode1 = new NavTreeNode(document.createElement('h1'), blockNode)
@@ -337,6 +475,29 @@ describe('<NavTree> class', () => {
     })
 
     it('should look into next parent node if parent does not contain next child or has wrong type', () => {
+      /*
+        n - node
+        c - node container
+        X - active node
+        (number) - uuid
+
+      move(5, TYPE, +1)
+
+                   c(1)                              c(1)
+                /       \                         /       \
+              c(2)      c(3)         ->         c(2)      c(3)
+             /   |      |   \                  /   |      |   \
+          n(4) X(5)   n(6) n(7)             n(4) n(5)   X(6) n(7)
+
+      move(6, TYPE, -1)
+
+                   c(1)                             c(1)
+                /       \                         /       \
+              c(2)      c(3)         ->         c(2)    c(3)
+             /   |      |   \                  /   |      |   \
+          n(4) n(5)   X(6) n(7)             n(4) X(5)   n(6) n(7)
+      */
+
       const blockNode1 = new NavTreeNode(document.createElement('div'))
       blockNode1.elem.dataset[NavNodeDataAttrs.NavType] = NavNodeTypes.Row
       const blockNode2 = new NavTreeNode(document.createElement('div'), blockNode1)
