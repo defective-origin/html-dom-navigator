@@ -10,6 +10,8 @@ npm install html-dom-navigator
 
 Example:
 ```ts
+import "html-dom-navigator";
+
 const html = document.createElement('div')
 html.innerHTML = `
   <div class="nav-panel" data-nav="row">
@@ -25,9 +27,8 @@ html.innerHTML = `
 `
 
 const navPanel = html.getElementsByClassName('nav-panel')[0] as HTMLElement
-const navigator = new Navigator()
 
-navigator.subscribe(navPanel)
+window.HtmlDomNavigator.subscribe(navPanel)
 ```
 
 
@@ -46,7 +47,7 @@ Example:
 const elemWithUUID = html.getElementsByClassName('uuid')[0] as HTMLElement
 const uuid = elemWithUUID.dataset.navUuid
 
-navigator.activateNavNodeByUuid(uuid)
+window.HtmlDomNavigator.activateNavNodeByUuid(uuid)
 ```
 
 
@@ -54,7 +55,7 @@ navigator.activateNavNodeByUuid(uuid)
 
 Example:
 ```ts
-navigator.activateNavNodeByLabel('test-label')
+window.HtmlDomNavigator.activateNavNodeByLabel('test-label')
 ```
 
 
@@ -64,7 +65,7 @@ ___If you activate block navigation node, then first navigation child with attri
 
 Example:
 ```ts
-navigator.deactivateNavNode()
+window.HtmlDomNavigator.deactivateNavNode()
 ```
 
 
@@ -72,7 +73,7 @@ navigator.deactivateNavNode()
 
 Example:
 ```ts
-navigator.unsubscribe()
+window.HtmlDomNavigator.unsubscribe()
 ```
 
 ## Attributes

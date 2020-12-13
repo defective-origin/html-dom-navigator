@@ -10,5 +10,3 @@ declare global {
 if (typeof window !== 'undefined') {
   window.HtmlDomNavigator = new Navigator()
 }
-
-// TODO: add images to readme.md
