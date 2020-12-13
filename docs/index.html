@@ -239,7 +239,8 @@
     </div>
     <script>
       const elem = document.getElementById('root')
-      window.HtmlDomNavigator.subscribe(elem)
+      const navigator = new HtmlDomNavigator()
+      navigator.subscribe(elem)
 
       let number = 1
       function removeNode() {
