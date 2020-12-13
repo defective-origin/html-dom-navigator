@@ -10,6 +10,7 @@ describe('<Navigator> class', () => {
 
   describe('<subscribe> method', () => {
     beforeEach(() => {
+      navigator.unsubscribe = jest.fn()
       navigator.navTree.build = jest.fn((elem = null) => { navigator.navTree.elem = elem })
       navigator.navTreeHtmlObserver.subscribe = jest.fn()
       navigator.navTreeClickObserver.subscribe = jest.fn()
@@ -21,6 +22,7 @@ describe('<Navigator> class', () => {
 
       navigator.subscribe(elem)
 
+      expect(navigator.unsubscribe).toBeCalled()
       expect(navigator.navTree.build).toBeCalledWith(elem)
       expect(navigator.navTreeHtmlObserver.subscribe).toBeCalledWith(navigator.navTree)
       expect(navigator.navTreeClickObserver.subscribe).toBeCalledWith(navigator.navTree)
@@ -34,6 +36,7 @@ describe('<Navigator> class', () => {
       navigator.subscribe(previousElem)
       navigator.subscribe(newElem)
 
+      expect(navigator.unsubscribe).toBeCalledTimes(2)
       expect(navigator.navTree.build).toBeCalledTimes(2)
       expect(navigator.navTreeHtmlObserver.subscribe).toBeCalledTimes(2)
       expect(navigator.navTreeClickObserver.subscribe).toBeCalledTimes(2)
@@ -48,6 +51,7 @@ describe('<Navigator> class', () => {
       navigator.subscribe(elem)
       navigator.subscribe(elem)
 
+      expect(navigator.unsubscribe).toBeCalledTimes(1)
       expect(navigator.navTree.build).toBeCalledTimes(1)
       expect(navigator.navTreeHtmlObserver.subscribe).toBeCalledTimes(1)
       expect(navigator.navTreeClickObserver.subscribe).toBeCalledTimes(1)

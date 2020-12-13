@@ -92,6 +92,7 @@ export default class Navigator {
    */
   public subscribe(elem: HTMLElement): void {
     if (!elem.isEqualNode(this.navTree.elem)) {
+      this.unsubscribe()
       this.navTree.build(elem)
       this.navTreeHtmlObserver.subscribe(this.navTree)
       this.navTreeClickObserver.subscribe(this.navTree)

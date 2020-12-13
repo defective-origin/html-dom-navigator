@@ -20,7 +20,7 @@ export default class NavTreeHtmlObserver {
 
   public subscribe = (observable: INavTreeHtmlObservable): void => {
     this.unsubscribe()
-    // FIXME: remove memory leaks
+
     if (observable.elem) {
       this.observable = observable
       this.mutationObserver.observe(observable.elem, this.observerConfig)
@@ -28,7 +28,11 @@ export default class NavTreeHtmlObserver {
   }
 
   public onHtmlChangeDetected = (): void => {
-    this.observable?.build(this.observable.elem)
+    if (this.observable?.elem) {
+      this.observable.build(this.observable.elem)
+    } else {
+      this.unsubscribe()
+    }
   }
 
   public unsubscribe = (): void => {

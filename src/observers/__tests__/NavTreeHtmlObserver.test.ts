@@ -56,10 +56,22 @@ describe('<NavTreeHtmlObserver> class', () => {
       expect(observable.build).toBeCalledWith(observable.elem)
     })
 
-    it('should not handle html change event if observable is not set', () => {
+    it('should unsubscribe if observable is not set', () => {
+      observer.unsubscribe = jest.fn()
+
       observer.onHtmlChangeDetected()
 
-      expect(observable.build).not.toBeCalled()
+      expect(observer.unsubscribe).toBeCalled()
+    })
+
+    it('should unsubscribe if observable lose html element link', () => {
+      observer.unsubscribe = jest.fn()
+      observer.subscribe(observable)
+      observable.elem = null
+
+      observer.onHtmlChangeDetected()
+
+      expect(observer.unsubscribe).toBeCalled()
     })
   })
 })
