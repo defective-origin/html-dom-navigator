@@ -15,7 +15,7 @@
     "plugin:@typescript-eslint/recommended",
     "airbnb-typescript/base"
   ],
-  
+  "ignorePatterns": [ "dist/*" ],
   "rules": {
     "padded-blocks": "off",
     "linebreak-style": ["error", "unix"],
