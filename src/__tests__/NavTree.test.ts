@@ -103,12 +103,6 @@ describe('<NavTree> class', () => {
       elem.dataset[NavNodeDataAttrs.NavType] = NavNodeTypes.Row
     })
 
-    it('should not build if element is not transferred', () => {
-      navTree.build()
-
-      expect(navTree.elem).toEqual(null)
-    })
-
     it('should not build if element has not nav attribute', () => {
       navTree.build(document.createElement('div'))
 

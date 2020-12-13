@@ -11,9 +11,7 @@ export default class NavTree implements INavTreeHtmlObservable,
   public nodeMapByLabel: Record<string, NavTreeNode> = {}
   public activeNode: NavTreeNode | null = null
 
-  // TODO: rewrite with returning root node
-  /**
-   * Parse html and build navigation tree. */
+  /** Parse html and register navigation nodes. */
   public parseHtml(elem: HTMLElement, parent: NavTreeNode): void {
     for (let index = 0; index < elem.children.length; index += 1) {
 
@@ -40,8 +38,12 @@ export default class NavTree implements INavTreeHtmlObservable,
     }
   }
 
-  public build(elem: HTMLElement | null = null): void {
-    if (!elem || !NavTreeNode.hasNavTypeAttribute(elem)) {
+  /**
+   * Build navigation tree and activate first or previous node.
+   * @param elem Should have data-nav attribute as row or column.
+   */
+  public build(elem: HTMLElement): void {
+    if (!NavTreeNode.hasNavTypeAttribute(elem)) {
       return
     }
 
@@ -142,7 +144,7 @@ export default class NavTree implements INavTreeHtmlObservable,
     this.move(this.activeNode, NavNodeTypes.Column, Offset.Prev)
   }
 
-  /** Activate next next in column. */
+  /** Activate next node in column. */
   public right(): void {
     this.move(this.activeNode, NavNodeTypes.Column, Offset.Next)
   }

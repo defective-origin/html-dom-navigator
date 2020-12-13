@@ -1,7 +1,7 @@
 export interface INavTreeHtmlObservable {
   elem: HTMLElement | null
 
-  build(elem: HTMLElement | null): void
+  build(elem: HTMLElement): void
 }
 
 export default class NavTreeHtmlObserver {
