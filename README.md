@@ -11,25 +11,26 @@ npm install html-dom-navigator
 
 Example:
 ```ts
-import "html-dom-navigator";
+import Navigator from "html-dom-navigator";
 
 const html = document.createElement('div')
 html.innerHTML = `
-  <div class="nav-panel" data-nav="row">
+  <div id="nav-panel" data-nav="row">
     <div data-nav="column">
       <div data-nav="item" data-nav-label="it will be activated by default">column-1</div>
       <div data-nav="item">column-2</div>
     </div>
     <div data-nav="row">
-      <div class="uuid" data-nav="item" data-nav-label="test-label">row-1</div>
+      <div id="uuid" data-nav="item" data-nav-label="test-label">row-1</div>
       <div data-nav="item" data-nav-uuid="test-uuid">row-2</div>
       </div>
   </div>
 `
 
-const navPanel = html.getElementsByClassName('nav-panel')[0] as HTMLElement
+const navPanel = document.getElementById('nav-panel') as HTMLElement
+const navigator = new Navigator()
 
-window.HtmlDomNavigator.subscribe(navPanel)
+navigator.subscribe(navPanel)
 ```
 
 
@@ -45,10 +46,10 @@ After changing DOM, Navigation tree rebuild and activate previous active navigat
 
 Example:
 ```ts
-const elemWithUUID = html.getElementsByClassName('uuid')[0] as HTMLElement
+const elemWithUUID = document.getElementById('uuid') as HTMLElement
 const uuid = elemWithUUID.dataset.navUuid
 
-window.HtmlDomNavigator.activateNavNodeByUuid(uuid)
+navigator.activateNavNodeByUuid(uuid)
 ```
 
 
@@ -56,7 +57,7 @@ window.HtmlDomNavigator.activateNavNodeByUuid(uuid)
 
 Example:
 ```ts
-window.HtmlDomNavigator.activateNavNodeByLabel('test-label')
+navigator.activateNavNodeByLabel('test-label')
 ```
 
 
@@ -66,7 +67,7 @@ ___If you activate block navigation node, then first navigation child with attri
 
 Example:
 ```ts
-window.HtmlDomNavigator.deactivateNavNode()
+navigator.deactivateNavNode()
 ```
 
 
@@ -74,7 +75,7 @@ window.HtmlDomNavigator.deactivateNavNode()
 
 Example:
 ```ts
-window.HtmlDomNavigator.unsubscribe()
+navigator.unsubscribe()
 ```
 
 ## Attributes
