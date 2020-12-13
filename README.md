@@ -1,5 +1,6 @@
 # html-dom-navigator
 The Navigator allows you to navigate with keyboard arrows and mouse click by the html navigation elements which have data-nav attribute.
+You can see an interactive example [here](https://defective-origin.github.io/html-dom-navigator/).
 
 ## Install
 ```shell
