@@ -11,7 +11,7 @@ describe('<Navigator> class', () => {
   describe('<subscribe> method', () => {
     beforeEach(() => {
       navigator.unsubscribe = jest.fn()
-      navigator.navTree.build = jest.fn((elem = null) => { navigator.navTree.elem = elem })
+      navigator.navTree.build = jest.fn((elem = null as any) => { navigator.navTree.elem = elem })
       navigator.navTreeHtmlObserver.subscribe = jest.fn()
       navigator.navTreeClickObserver.subscribe = jest.fn()
       navigator.navTreeKeyPressObserver.subscribe = jest.fn()
