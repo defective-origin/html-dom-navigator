@@ -1,0 +1,8 @@
+{
+    "editor.tabSize": 2,
+    "eslint.validate": [
+        "javascript",
+        "typescript",
+    ],
+    "files.eol": "\r\n",
+}

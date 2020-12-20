@@ -1,0 +1,45 @@
+{
+  // include: ['./src'],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2020, // Allows for the parsing of modern ECMAScript features
+    "sourceType": "module", // Allows for the use of imports
+    "project": "./.tslintrc.json"
+  },
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "airbnb-typescript/base"
+  ],
+  "ignorePatterns": [ "dist/*" ],
+  "rules": {
+    "padded-blocks": "off",
+    "linebreak-style": ["error", "unix"],
+    
+    "semi": "off",
+    "@typescript-eslint/semi": ["error", "never"],
+
+    "lines-between-class-members": "off",
+    "@typescript-eslint/lines-between-class-members": "off",
+
+    "no-param-reassign": ["error", { "props": false }],
+    "class-methods-use-this": "off",
+    "no-plusplus": "off"
+  },
+  "overrides": [
+    {
+        "files": ["*.test.ts"],
+        "rules": {
+          "no-unused-vars": "off",
+          "@typescript-eslint/no-unused-vars": "off",
+          
+          "no-explicit-any": "off",
+          "@typescript-eslint/no-explicit-any": "off"
+        }
+    }
+]
+}
