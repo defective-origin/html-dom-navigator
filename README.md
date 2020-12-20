@@ -1,4 +1,7 @@
 # html-dom-navigator
+[![Build Status](https://travis-ci.org/defective-origin/html-dom-navigator.svg?branch=main)](https://travis-ci.org/defective-origin/html-dom-navigator)
+[![Coverage Status](https://coveralls.io/repos/github/defective-origin/html-dom-navigator/badge.svg?branch=main)](https://coveralls.io/github/defective-origin/html-dom-navigator?branch=main)
+
 The Navigator allows you to navigate with keyboard arrows and mouse click by the html navigation elements which have data-nav attribute.
 You can see an interactive example [here](https://defective-origin.github.io/html-dom-navigator/).
 
