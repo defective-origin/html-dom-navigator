@@ -7,8 +7,15 @@ install:
   - npm install
 
 script:
-  - npm run build-interaction-page
   - npm run cover
+
+deploy:
+  provider: script
+  skip_cleanup: true
+  script: npm run build-interaction-page
+  keep_history: true
+  on:
+    branch: main
 
 # Send coverage data to Coveralls
 after_script: "cat coverage/lcov.info | node_modules/coveralls/bin/coveralls.js"
