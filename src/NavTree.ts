@@ -117,7 +117,7 @@ export default class NavTree implements INavTreeHtmlObservable,
   }
 
   /** Find and activate node by type and offset. */
-  public move(node: NavTreeNode | null, offset: number, type: NavNodeTypes | null = null): void {
+  public move(node: NavTreeNode | null, offset: Offset, type: NavNodeTypes | null = null): void {
     if (!node || !node.parent) {
       return
     }

@@ -39,7 +39,7 @@ navigator.subscribe(navPanel)
 
 ## Navigation tree handle next events:
 - Changing DOM in order to rebuild navigation tree.
-- Keyboard arrows keypress in order to activate next navigation node.
+- Keyboard arrows, tab keypress in order to activate next navigation node.
 - Clicking on navigation node with attribute data-nav="item" to activate navigation node.
 
 After changing DOM, Navigation tree rebuild and activate previous active navigation node otherwise it activates first navigation node which was found.

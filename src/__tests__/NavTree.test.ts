@@ -358,19 +358,19 @@ describe('<NavTree> class', () => {
       X - active node
       (number) - uuid
 
-      move(2, COLUMN, +1)
+      move(2, +1, TYPE)
 
                c(1)                              c(1)
             /       \             ->          /       \
           X(2)      n(3)                     n(2)     X(3)
 
-      move(3, COLUMN, -1)
+      move(3, -1, TYPE)
 
                c(1)                              c(1)
             /       \             ->          /       \
           n(2)      X(3)                     X(2)     n(3)
 
-      move(5, TYPE, +1)
+      move(5, +1, TYPE)
 
                    c(1)                              c(1)
                 /       \                         /       \
@@ -378,7 +378,7 @@ describe('<NavTree> class', () => {
              /   |      |   \                  /   |      |   \
           n(4) X(5)   n(6) n(7)             n(4) n(5)   X(6) n(7)
 
-      move(6, TYPE, -1)
+      move(6, -1, TYPE)
 
                    c(1)                              c(1)
                 /       \                         /       \
@@ -386,7 +386,7 @@ describe('<NavTree> class', () => {
              /   |      |   \                  /   |      |   \
           n(4) n(5)   X(6) n(7)             n(4) X(5)   n(6) n(7)
 
-      move(5, TYPE, +2)
+      move(5, +2, TYPE)
 
                    c(1)                              c(1)
                 /       \                         /       \
@@ -394,7 +394,7 @@ describe('<NavTree> class', () => {
              /   |      |   \                  /   |      |   \
           n(4) X(5)   n(6) n(7)             n(4) n(5)   n(6) X(7)
 
-      move(6, TYPE, -2)
+      move(6, -2, TYPE)
 
                    c(1)                              c(1)
                 /       \                         /       \
@@ -429,13 +429,13 @@ describe('<NavTree> class', () => {
         X - active node
         (number) - uuid
 
-        move(2, COLUMN, +1)
+        move(2, +1, TYPE)
 
                      c(1)                             c(1)
                   /       \             ->          /       \
                 X(2)      n(3)                     n(2)     X(3)
 
-        move(3, COLUMN, -1)
+        move(3, -1, TYPE)
 
                      c(1)                              c(1)
                   /       \             ->          /       \
@@ -451,6 +451,45 @@ describe('<NavTree> class', () => {
       navTree.move(navNode1, Offset.Next, NavNodeTypes.Row)
 
       expect(navTree.activateNode).toBeCalledWith(navNode2)
+
+      navTree.move(navNode2, Offset.Prev, NavNodeTypes.Row)
+
+      expect(navTree.activateNode).toBeCalledWith(navNode1)
+    })
+
+    it('should activate next node if type is not transferred ', () => {
+      /*
+        n - node
+        c - node container
+        X - active node
+        (number) - uuid
+
+        move(2, +1)
+
+                     c(1)                             c(1)
+                  /       \             ->          /       \
+                X(2)      n(3)                     n(2)     X(3)
+
+        move(3, -1)
+
+                     c(1)                              c(1)
+                  /       \             ->          /       \
+                n(2)      X(3)                     X(2)     n(3)
+      */
+
+      const blockNode = new NavTreeNode(document.createElement('div'))
+      blockNode.elem.dataset[NavNodeDataAttrs.NavType] = NavNodeTypes.Row
+      const navNode1 = new NavTreeNode(document.createElement('h1'), blockNode)
+      const navNode2 = new NavTreeNode(document.createElement('h2'), blockNode)
+      navTree.activateNode = jest.fn()
+
+      navTree.move(navNode1, Offset.Next)
+
+      expect(navTree.activateNode).toBeCalledWith(navNode2)
+
+      navTree.move(navNode2, Offset.Prev)
+
+      expect(navTree.activateNode).toBeCalledWith(navNode1)
     })
 
     it('should activate next node if parent contains child by current child index + offset', () => {
@@ -460,13 +499,13 @@ describe('<NavTree> class', () => {
         X - active node
         (number) - uuid
 
-        move(2, COLUMN, +2)
+        move(2, +2, TYPE)
 
                        c(1)                                   c(1)
                   /     |      \            ->           /     |      \
                 X(2)   n(3)   n(4)                     n(2)   n(3)   X(4)
 
-        move(4, COLUMN, -2)
+        move(4, -2, TYPE)
 
                        c(1)                                   c(1)
                   /     |      \            ->           /     |      \
@@ -484,6 +523,10 @@ describe('<NavTree> class', () => {
       navTree.move(navNode1, 3, NavNodeTypes.Row)
 
       expect(navTree.activateNode).toBeCalledWith(navNode4)
+
+      navTree.move(navNode4, -3, NavNodeTypes.Row)
+
+      expect(navTree.activateNode).toBeCalledWith(navNode1)
     })
 
     it('should look into next parent node if parent does not contain next child or has wrong type', () => {
@@ -493,7 +536,7 @@ describe('<NavTree> class', () => {
         X - active node
         (number) - uuid
 
-      move(5, TYPE, +1)
+      move(5, +1, TYPE)
 
                    c(1)                              c(1)
                 /       \                         /       \
@@ -501,13 +544,13 @@ describe('<NavTree> class', () => {
              /   |      |   \                  /   |      |   \
           n(4) X(5)   n(6) n(7)             n(4) n(5)   X(6) n(7)
 
-      move(6, TYPE, -1)
+      move(6, -1, TYPE)
 
                    c(1)                             c(1)
                 /       \                         /       \
               c(2)      c(3)         ->         c(2)    c(3)
              /   |      |   \                  /   |      |   \
-          n(4) n(5)   X(6) n(7)             n(4) X(5)   n(6) n(7)
+          n(4) n(5)   X(6) n(7)             X(4) n(5)   n(6) n(7)
       */
 
       const blockNode1 = new NavTreeNode(document.createElement('div'))
