@@ -23,9 +23,9 @@ export default class NavTreeKeyPressObserver {
   }
 
   public onKeyEventDetected = (event: KeyboardEvent): void => {
-    event.preventDefault()
     const handler = this.controls[event.key]
     if (handler) {
+      event.preventDefault()
       handler()
     }
   }
