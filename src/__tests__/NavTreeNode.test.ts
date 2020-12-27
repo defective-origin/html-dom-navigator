@@ -84,6 +84,21 @@ describe('<NavTreeNode> class', () => {
     })
   })
 
+  describe('<focus> getter', () => {
+    it('should return selector to focusable element', () => {
+      elem.dataset[NavNodeDataAttrs.NavFocus] = 'TEST'
+      const node = new NavTreeNode(elem)
+
+      expect(node.focus).toEqual('TEST')
+    })
+
+    it('should return null if focus is not set', () => {
+      const node = new NavTreeNode(elem)
+
+      expect(node.focus).toEqual(null)
+    })
+  })
+
   describe('<isActive> getter', () => {
     it('should return true if attribute is defined', () => {
       elem.dataset[NavNodeDataAttrs.ActiveNavItem] = 'true'
@@ -186,6 +201,21 @@ describe('<NavTreeNode> class', () => {
 
       expect(elem.focus).toHaveBeenCalled()
       expect(elem.scrollIntoView).toHaveBeenCalled()
+    })
+
+    it('should focus on element selected by data-focus attribute if it is set', () => {
+      const child = document.createElement('h1')
+      child.focus = jest.fn()
+      child.scrollIntoView = jest.fn()
+
+      elem.appendChild(child)
+      elem.dataset[NavNodeDataAttrs.NavFocus] = 'h1'
+      const node = new NavTreeNode(elem)
+
+      node.activate()
+
+      expect(child.focus).toHaveBeenCalled()
+      expect(child.scrollIntoView).toHaveBeenCalled()
     })
 
     it('should not activate again if node is active already', () => {

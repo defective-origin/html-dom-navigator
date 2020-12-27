@@ -133,3 +133,15 @@ The following attributes can be set on the navigation node:
    <!-- not active   -->
   <div data-nav="item">home<div>
   ```
+
+
+- data-nav-focus: __string__ - ___set by user___
+
+  This attribute set only on item navigation element.
+  You can use any selector as for __Document.querySelector()__ method.
+  In most cases it needs for custom inputs.
+   ```html
+  <div data-nav="item" data-nav-focus="#input">
+    <input id="input" type="text" placeholder="enter text" />
+  </div>
+  ```

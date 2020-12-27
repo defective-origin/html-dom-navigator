@@ -10,6 +10,7 @@ export enum NavNodeDataAttrs {
   NavType = 'nav',
   NavLabel = 'navLabel',
   NavUuid = 'navUuid',
+  NavFocus = 'navFocus',
   ActiveNavItem = 'activeNavItem',
 }
 
@@ -55,6 +56,11 @@ export default class NavTreeNode {
     return this.elem.dataset[NavNodeDataAttrs.NavLabel] || null
   }
 
+  /** Return selector to focusable element otherwise null. */
+  public get focus(): string | null {
+    return this.elem.dataset[NavNodeDataAttrs.NavFocus] || null
+  }
+
   /** Return true if node is active otherwise false. */
   public get isActive(): boolean {
     return Boolean(this.elem.dataset[NavNodeDataAttrs.ActiveNavItem])
@@ -83,9 +89,10 @@ export default class NavTreeNode {
   /** Activate node if it is not active. */
   public activate(): void {
     if (!this.isActive && this.type === NavNodeTypes.Item) {
+      const elem: HTMLElement = this.focus && this.elem.querySelector(this.focus) || this.elem
       this.elem.dataset[NavNodeDataAttrs.ActiveNavItem] = 'true'
-      this.elem.focus()
-      this.elem.scrollIntoView({ block: 'center', inline: 'center', behavior: 'smooth' }) // scroll to a focused element when we have a scroll
+      elem.focus()
+      elem.scrollIntoView({ block: 'center', inline: 'center', behavior: 'smooth' }) // scroll to a focused element when we have a scroll
     }
   }
 
