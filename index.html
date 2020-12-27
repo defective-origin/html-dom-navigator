@@ -233,6 +233,15 @@
             <div data-nav="item">1</div>
             <div data-nav="item">2</div>
           </section>
+
+          <section data-nav="row" action="console.log('form submitted')">
+            <div data-nav="item" data-nav-focus="#input">
+              <input id="input" type="text" placeholder="enter text" />
+            </div>
+            <div data-nav="item" data-nav-focus="#button" onclick="console.log('button wrapper clicked')">
+              <input class="button" id="button" type="button" value="submit" onclick="console.log('button clicked')" />
+            </div>
+          </section>
         </article>
       </main>
       <div class="actions">
