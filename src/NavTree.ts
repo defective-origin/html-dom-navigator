@@ -10,6 +10,7 @@ export default class NavTree implements INavTreeHtmlObservable,
   public nodeMapByUuid: Record<string, NavTreeNode> = {}
   public nodeMapByLabel: Record<string, NavTreeNode> = {}
   public activeNode: NavTreeNode | null = null
+  public rootNode: NavTreeNode | null = null
 
   /** Parse html and register navigation nodes. */
   public parseHtml(elem: HTMLElement, parent: NavTreeNode): void {
@@ -48,24 +49,25 @@ export default class NavTree implements INavTreeHtmlObservable,
     }
 
     const prevActiveNavItemUuid = this.activeNode?.uuid as string
-    const rootNode = new NavTreeNode(elem)
 
     this.clear()
 
     this.elem = elem
+    this.rootNode = new NavTreeNode(elem)
 
-    this.parseHtml(elem, rootNode)
+    this.parseHtml(this.elem, this.rootNode)
 
     if (this.nodeMapByUuid[prevActiveNavItemUuid]) {
       this.activateNodeByUuid(prevActiveNavItemUuid)
     } else {
-      this.activateNode(rootNode)
+      this.activateNode(this.rootNode)
     }
   }
 
   /** Deactivate active node and clear navigation tree. */
   public clear(): void {
     this.elem = null
+    this.rootNode = null
     this.nodeMapByUuid = {}
     this.nodeMapByLabel = {}
     this.deactivateNode()
@@ -115,37 +117,47 @@ export default class NavTree implements INavTreeHtmlObservable,
   }
 
   /** Find and activate node by type and offset. */
-  public move(node: NavTreeNode | null, type: NavNodeTypes, offset: number): void {
+  public move(node: NavTreeNode | null, offset: number, type: NavNodeTypes | null = null): void {
     if (!node || !node.parent) {
       return
     }
 
     const parentNode = node.parent
     const nextNode = parentNode.getChildNode(node.index + offset)
-    if (parentNode.hasType(type) && nextNode) {
+    if ((!type || parentNode.hasType(type)) && nextNode) {
       this.activateNode(nextNode)
     } else {
-      this.move(parentNode, type, offset)
+      this.move(parentNode, offset, type)
+    }
+  }
+
+  /** Activate next node if there is one otherwise first node in tree. */
+  public next(): void {
+    const prevActiveNode = this.activeNode
+    this.move(this.activeNode, Offset.Next)
+
+    if (this.activeNode && prevActiveNode && prevActiveNode.uuid === this.activeNode.uuid) {
+      this.activateNode(this.rootNode)
     }
   }
 
   /** Activate previous node in row. */
   public up(): void {
-    this.move(this.activeNode, NavNodeTypes.Row, Offset.Prev)
+    this.move(this.activeNode, Offset.Prev, NavNodeTypes.Row)
   }
 
   /** Activate next node in row. */
   public down(): void {
-    this.move(this.activeNode, NavNodeTypes.Row, Offset.Next)
+    this.move(this.activeNode, Offset.Next, NavNodeTypes.Row)
   }
 
   /** Activate previous node in column. */
   public left(): void {
-    this.move(this.activeNode, NavNodeTypes.Column, Offset.Prev)
+    this.move(this.activeNode, Offset.Prev, NavNodeTypes.Column)
   }
 
   /** Activate next node in column. */
   public right(): void {
-    this.move(this.activeNode, NavNodeTypes.Column, Offset.Next)
+    this.move(this.activeNode, Offset.Next, NavNodeTypes.Column)
   }
 }

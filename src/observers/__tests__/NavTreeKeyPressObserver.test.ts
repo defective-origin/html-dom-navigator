@@ -5,6 +5,7 @@ class TestObservable implements INavTreeKeyPressObservable {
   down = jest.fn()
   left = jest.fn()
   right = jest.fn()
+  next = jest.fn()
 }
 
 describe('<NavTreeClickObserver> class', () => {
@@ -43,21 +44,24 @@ describe('<NavTreeClickObserver> class', () => {
     it('should handle navigation key press events', () => {
       observer.subscribe(observable)
 
-      observer.onKeyEventDetected({ key: 'ArrowUp' } as any)
+      observer.onKeyEventDetected({ key: 'Tab', preventDefault: jest.fn() } as any)
+      expect(observable.next).toBeCalled()
+
+      observer.onKeyEventDetected({ key: 'ArrowUp', preventDefault: jest.fn() } as any)
       expect(observable.up).toBeCalled()
 
-      observer.onKeyEventDetected({ key: 'ArrowDown' } as any)
+      observer.onKeyEventDetected({ key: 'ArrowDown', preventDefault: jest.fn() } as any)
       expect(observable.down).toBeCalled()
 
-      observer.onKeyEventDetected({ key: 'ArrowLeft' } as any)
+      observer.onKeyEventDetected({ key: 'ArrowLeft', preventDefault: jest.fn() } as any)
       expect(observable.left).toBeCalled()
 
-      observer.onKeyEventDetected({ key: 'ArrowRight' } as any)
+      observer.onKeyEventDetected({ key: 'ArrowRight', preventDefault: jest.fn() } as any)
       expect(observable.right).toBeCalled()
     })
 
     it('should not handle key press event if observable is not set', () => {
-      const event = { key: 'ArrowUp' } as any
+      const event = { key: 'ArrowUp', preventDefault: jest.fn() } as any
 
       observer.onKeyEventDetected(event)
 
@@ -65,7 +69,7 @@ describe('<NavTreeClickObserver> class', () => {
     })
 
     it('should not handle key press event if there is not handler by set key', () => {
-      const event = { key: 'NotExist' } as any
+      const event = { key: 'NotExist', preventDefault: jest.fn() } as any
 
       observer.subscribe(observable)
       observer.onKeyEventDetected(event)

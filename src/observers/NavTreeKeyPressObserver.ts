@@ -3,6 +3,7 @@ export interface INavTreeKeyPressObservable {
   down(): void
   left(): void
   right(): void
+  next(): void
 }
 
 export default class NavTreeKeyPressObserver {
@@ -16,11 +17,13 @@ export default class NavTreeKeyPressObserver {
       ArrowDown: () => observable.down(),
       ArrowLeft: () => observable.left(),
       ArrowRight: () => observable.right(),
+      Tab: () => observable.next(),
     }
     window.onkeydown = this.onKeyEventDetected
   }
 
   public onKeyEventDetected = (event: KeyboardEvent): void => {
+    event.preventDefault()
     const handler = this.controls[event.key]
     if (handler) {
       handler()

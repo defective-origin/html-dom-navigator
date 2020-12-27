@@ -152,6 +152,7 @@ describe('<NavTree> class', () => {
       const node = new NavTreeNode(document.createElement('div'))
 
       navTree.elem = document.createElement('div')
+      navTree.rootNode = new NavTreeNode(document.createElement('div'))
       navTree.nodeMapByUuid = { TEST: node }
       navTree.nodeMapByLabel = { TEST: node }
       navTree.activeNode = node
@@ -159,6 +160,7 @@ describe('<NavTree> class', () => {
       navTree.clear()
 
       expect(navTree.elem).toEqual(null)
+      expect(navTree.rootNode).toEqual(null)
       expect(navTree.nodeMapByUuid).toEqual({})
       expect(navTree.nodeMapByLabel).toEqual({})
       expect(navTree.activeNode).toEqual(null)
@@ -383,13 +385,29 @@ describe('<NavTree> class', () => {
               c(2)      c(3)         ->         c(2)      c(3)
              /   |      |   \                  /   |      |   \
           n(4) n(5)   X(6) n(7)             n(4) X(5)   n(6) n(7)
+
+      move(5, TYPE, +2)
+
+                   c(1)                              c(1)
+                /       \                         /       \
+              c(2)      c(3)         ->         c(2)      c(3)
+             /   |      |   \                  /   |      |   \
+          n(4) X(5)   n(6) n(7)             n(4) n(5)   n(6) X(7)
+
+      move(6, TYPE, -2)
+
+                   c(1)                              c(1)
+                /       \                         /       \
+              c(2)      c(3)         ->         c(2)      c(3)
+             /   |      |   \                  /   |      |   \
+          n(4) n(5)   X(6) n(7)             X(4) n(5)   n(6) n(7)
     */
 
     it('should not look for next node if node is not transferred', () => {
       const node = new NavTreeNode(document.createElement('div'))
       navTree.activeNode = node
 
-      navTree.move(null, NavNodeTypes.Row, Offset.Next)
+      navTree.move(null, Offset.Next)
 
       expect(navTree.activeNode).toEqual(node)
     })
@@ -399,7 +417,7 @@ describe('<NavTree> class', () => {
       const node2 = new NavTreeNode(document.createElement('h2'))
       navTree.activeNode = node1
 
-      navTree.move(node2, NavNodeTypes.Row, Offset.Next)
+      navTree.move(node2, Offset.Next, NavNodeTypes.Row)
 
       expect(navTree.activeNode).toEqual(node1)
     })
@@ -430,7 +448,7 @@ describe('<NavTree> class', () => {
       const navNode2 = new NavTreeNode(document.createElement('h2'), blockNode)
       navTree.activateNode = jest.fn()
 
-      navTree.move(navNode1, NavNodeTypes.Row, Offset.Next)
+      navTree.move(navNode1, Offset.Next, NavNodeTypes.Row)
 
       expect(navTree.activateNode).toBeCalledWith(navNode2)
     })
@@ -463,7 +481,7 @@ describe('<NavTree> class', () => {
       const navNode4 = new NavTreeNode(document.createElement('h4'), blockNode)
       navTree.activateNode = jest.fn()
 
-      navTree.move(navNode1, NavNodeTypes.Row, 3)
+      navTree.move(navNode1, 3, NavNodeTypes.Row)
 
       expect(navTree.activateNode).toBeCalledWith(navNode4)
     })
@@ -504,9 +522,44 @@ describe('<NavTree> class', () => {
       const navNode2 = new NavTreeNode(document.createElement('h2'), blockNode4)
       navTree.activateNode = jest.fn()
 
-      navTree.move(navNode2, NavNodeTypes.Row, Offset.Next)
+      navTree.move(navNode2, Offset.Next, NavNodeTypes.Row)
 
       expect(navTree.activateNode).toBeCalledWith(navNode1)
+    })
+  })
+
+  describe('<next> method', () => {
+    it('should call move', () => {
+      const previousActiveNode = new NavTreeNode(document.createElement('span'))
+      const newActiveNode = new NavTreeNode(document.createElement('div'))
+      navTree.move = jest.fn(() => navTree.activeNode = newActiveNode)
+      navTree.activateNode = jest.fn()
+      navTree.activeNode = previousActiveNode
+
+      navTree.next()
+
+      expect(navTree.move).toBeCalledWith(previousActiveNode, Offset.Next)
+      expect(navTree.activateNode).not.toBeCalled()
+    })
+
+    it('should activate first node if current node is equal last one', () => {
+      navTree.move = jest.fn()
+      navTree.activateNode = jest.fn()
+      navTree.activeNode = new NavTreeNode(document.createElement('div'))
+
+      navTree.next()
+
+      expect(navTree.activateNode).toBeCalledWith(navTree.rootNode)
+    })
+
+    it('should not activate node if active node is null', () => {
+      navTree.move = jest.fn()
+      navTree.activateNode = jest.fn()
+      navTree.activeNode = null
+
+      navTree.next()
+
+      expect(navTree.activateNode).not.toBeCalled()
     })
   })
 
@@ -517,7 +570,7 @@ describe('<NavTree> class', () => {
 
       navTree.up()
 
-      expect(navTree.move).toBeCalledWith(navTree.activeNode, NavNodeTypes.Row, Offset.Prev)
+      expect(navTree.move).toBeCalledWith(navTree.activeNode, Offset.Prev, NavNodeTypes.Row)
     })
   })
 
@@ -528,7 +581,7 @@ describe('<NavTree> class', () => {
 
       navTree.down()
 
-      expect(navTree.move).toBeCalledWith(navTree.activeNode, NavNodeTypes.Row, Offset.Next)
+      expect(navTree.move).toBeCalledWith(navTree.activeNode, Offset.Next, NavNodeTypes.Row)
     })
   })
 
@@ -539,7 +592,7 @@ describe('<NavTree> class', () => {
 
       navTree.left()
 
-      expect(navTree.move).toBeCalledWith(navTree.activeNode, NavNodeTypes.Column, Offset.Prev)
+      expect(navTree.move).toBeCalledWith(navTree.activeNode, Offset.Prev, NavNodeTypes.Column)
     })
   })
 
@@ -550,7 +603,7 @@ describe('<NavTree> class', () => {
 
       navTree.right()
 
-      expect(navTree.move).toBeCalledWith(navTree.activeNode, NavNodeTypes.Column, Offset.Next)
+      expect(navTree.move).toBeCalledWith(navTree.activeNode, Offset.Next, NavNodeTypes.Column)
     })
   })
 })
